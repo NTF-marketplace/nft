@@ -1,7 +1,7 @@
-package com.example.nft.service
+package com.api.nft.service
 
-import com.example.nft.enums.ChainType
-import com.example.nft.service.dto.NftResponse
+import com.api.nft.enums.ChainType
+import com.api.nft.service.dto.NftResponse
 
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service

@@ -1,4 +1,4 @@
-package com.example.nft.enums
+package com.api.nft.enums
 
 enum class ChainType{
         ETHEREUM_MAINNET,

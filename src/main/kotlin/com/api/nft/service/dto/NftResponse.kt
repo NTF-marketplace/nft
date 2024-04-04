@@ -1,5 +1,6 @@
-package com.example.nft.service.dto
+package com.api.nft.service.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -32,12 +33,35 @@ data class MetadataResponse(
     val description: String,
     val image: String,
     @JsonProperty("animation_url") val animationUrl: String?,
-    val attributes: List<String>,
-)
+    val attributes: List<Map<String, String>>,
+    @JsonIgnoreProperties(ignoreUnknown = true) @JsonProperty("external_url") val externalUrl: String? = null
+){
+    companion object {
+        fun toMetadataResponse(metadata: String): MetadataResponse {
+            val mapper = jacksonObjectMapper()
+            return mapper.readValue(metadata, MetadataResponse::class.java)
+        }
+
+        fun parseImage(image: String) : String {
+            return image.replace("ipfs://", "https://ipfs.io/ipfs/")
+        }
+    }
+}
 
 data class AttributeResponse(
-    @JsonProperty("trait_type") val traitType: String,
-    val value: String
-)
+    @JsonProperty("trait_type") val traitType: String?,
+    val value: String?
+) {
+    companion object {
+        fun toAttributeResponse(attributes: List<Map<String, String>>): List<AttributeResponse> {
+            return attributes.map {
+                AttributeResponse(
+                    traitType = it["trait_type"],
+                    value = it["value"]
+                )
+            }
+        }
+    }
+}
 
 

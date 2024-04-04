@@ -1,4 +1,4 @@
-package com.example.nft
+package com.api.nft
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

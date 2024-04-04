@@ -1,4 +1,4 @@
-package com.example.nft.controller
+package com.api.nft.controller
 
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController

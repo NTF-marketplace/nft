@@ -1,4 +1,4 @@
-package com.api.nft.service.dto
+package com.api.nft.service.external.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

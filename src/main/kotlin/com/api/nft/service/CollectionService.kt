@@ -1,7 +1,7 @@
 package com.api.nft.service
 
-import com.api.nft.domain.Collection
-import com.api.nft.domain.CollectionRepository
+import com.api.nft.domain.collection.Collection
+import com.api.nft.domain.collection.repository.CollectionRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 

@@ -6,6 +6,8 @@ plugins {
     id("org.flywaydb.flyway") version "9.21.1"
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
+    kotlin("plugin.lombok") version "1.9.23"
+    id("io.freefair.lombok") version "8.1.0"
 }
 
 group = "com.api"
@@ -21,7 +23,6 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-batch")
-    implementation("org.springframework.boot:spring-boot-starter-jooq")
     implementation("org.springframework.boot:spring-boot-starter-quartz")
 
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
@@ -36,9 +37,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-//    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
-//    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
-
+//    implementation("com.querydsl:querydsl-sql:4.3.1")
+//    implementation("com.infobip:infobip-spring-data-r2dbc-querydsl-boot-starter:6.2.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")

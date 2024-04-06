@@ -24,6 +24,14 @@ CREATE TABLE IF NOT EXISTS metadata (
 );
 
 
+CREATE TABLE IF NOt EXISTS attribute (
+    id SERIAL PRIMARY KEY,
+    nft_id BIGINT REFERENCES nft(id),
+    trait_type varchar(255),
+    value varchar(255)
+);
+
+
 
 
 

@@ -1,10 +1,12 @@
-package com.api.nft.domain
+package com.api.nft.domain.nft
 
+import lombok.AllArgsConstructor
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("nft")
+@AllArgsConstructor
 class Nft(
     @Id val id: Long? = null,
     @Column("token_id") val tokenId: String,

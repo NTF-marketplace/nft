@@ -1,5 +1,6 @@
-package com.api.nft.domain
+package com.api.nft.domain.collection.repository
 
+import com.api.nft.domain.collection.Collection
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Mono
 

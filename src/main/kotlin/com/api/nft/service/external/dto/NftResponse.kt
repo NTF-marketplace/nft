@@ -33,8 +33,9 @@ data class MetadataResponse(
     val description: String,
     val image: String,
     @JsonProperty("animation_url") val animationUrl: String?,
-    val attributes: List<Map<String, String>>,
-    @JsonIgnoreProperties(ignoreUnknown = true) @JsonProperty("external_url") val externalUrl: String? = null
+    val attributes: List<Map<String, String>> = emptyList(),
+    @JsonIgnoreProperties(ignoreUnknown = true) @JsonProperty("external_url") val externalUrl: String? = null,
+    @JsonIgnoreProperties(ignoreUnknown = true) @JsonProperty("youtube_url") val youtubeUrl: String? = null,
 ){
     companion object {
         fun toMetadataResponse(metadata: String): MetadataResponse {

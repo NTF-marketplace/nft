@@ -1,5 +1,6 @@
 package com.api.nft.service
 
+import com.api.nft.controller.dto.NftBatchRequest
 import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
@@ -10,6 +11,7 @@ import com.api.nft.service.external.dto.NftResponse
 import com.api.nft.service.external.moralis.MoralisApiService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
@@ -20,6 +22,13 @@ class NftService(
     private val metadataService: MetadataService,
     private val attributeService: AttributeService,
 ) {
+
+    fun getBatchNftList(reqeusts : List<NftBatchRequest>): Flux<NftMetadataDto> {
+        return Flux.fromIterable(reqeusts)
+            .flatMap {
+                findOrCreateNft(it.tokenId,it.tokenAddress,it.chainType)
+            }
+    }
 
     @Transactional
     fun findOrCreateNft(tokenId: String, tokenAddress: String, chainType: ChainType): Mono<NftMetadataDto> {

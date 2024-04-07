@@ -37,9 +37,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-//    implementation("com.querydsl:querydsl-sql:4.3.1")
-//    implementation("com.infobip:infobip-spring-data-r2dbc-querydsl-boot-starter:6.2.0")
-
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.batch:spring-batch-test")

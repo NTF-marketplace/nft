@@ -12,6 +12,19 @@ spring:
     url: r2dbc:postgresql://localhost:5434/nft
     username: nft
     password: nft
+  main:
+    allow-bean-definition-overriding: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: closeSea
+    password: closeSeaP@ssword
+    queues:
+      nft: "nftQueue"
+    template:
+      exchange: "exchange"
+      routing-key: "routingKey"
 
 logging:
   level:

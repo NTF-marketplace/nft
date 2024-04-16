@@ -13,7 +13,6 @@ class Nft(
     @Column("token_address") val tokenAddress: String,
     @Column("chain_type") val chinType: String,
     @Column("nft_name")val nftName: String,
-    @Column("owner_of") val ownerOf: String?,
     @Column("token_hash")val tokenHash: String?,
     val collectionName: String,
     val amount: Int,

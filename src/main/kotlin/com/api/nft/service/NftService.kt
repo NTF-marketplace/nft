@@ -5,10 +5,12 @@ import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
+import com.api.nft.event.NftCreatedEvent
 import com.api.nft.service.external.dto.AttributeResponse
 import com.api.nft.service.external.dto.MetadataResponse
 import com.api.nft.service.external.dto.NftResponse
 import com.api.nft.service.external.moralis.MoralisApiService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
@@ -21,6 +23,7 @@ class NftService(
     private val collectionService: CollectionService,
     private val metadataService: MetadataService,
     private val attributeService: AttributeService,
+    private val eventPublisher: ApplicationEventPublisher,
 ) {
 
     fun getBatchNftList(reqeusts : List<NftBatchRequest>): Flux<NftMetadataDto> {
@@ -54,6 +57,7 @@ class NftService(
                             attributeResponseList ?: emptyList()
                         ))
                         .then(Mono.just(nft))
+                        .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft)) }
                 }
         }
     }
@@ -86,7 +90,6 @@ class NftService(
                 chinType = chainType.toString(),
                 nftName = metadata.name,
                 collectionName = it.name,
-                ownerOf = nft.ownerOf,
                 tokenHash = nft.tokenHash,
                 amount = nft.amount.toInt()
                 )

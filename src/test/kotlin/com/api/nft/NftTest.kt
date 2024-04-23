@@ -24,22 +24,22 @@ class NftTest(
         println(res)
     }
 
-    @Test
-    fun test1() {
-        val tokenAddress = "0x57a133561c74c242a0b70af9c129126244b4869f"
-        val tokenId = "4733"
-        val res =nftService.getNftByMoralis(tokenId,tokenAddress, ChainType.POLYGON_MAINNET).block()
-        println(res?.first.toString())
-        println(res?.second.toString())
-        println(res?.third.toString())
-    }
-
-    @Test
-    fun test2() {
-        val tokenAddress = "0xe7900239e9332060dc975ed6f0cc5f0129d924cf"
-        val tokenId = "3"
-        nftService.createNftProcess(tokenId,tokenAddress, ChainType.POLYGON_MAINNET).block()
-    }
+//    @Test
+//    fun test1() {
+//        val tokenAddress = "0x57a133561c74c242a0b70af9c129126244b4869f"
+//        val tokenId = "4733"
+//        val res =nftService.getNftByMoralis(tokenId,tokenAddress, ChainType.POLYGON_MAINNET).block()
+//        println(res?.first.toString())
+//        println(res?.second.toString())
+//        println(res?.third.toString())
+//    }
+//
+//    @Test
+//    fun test2() {
+//        val tokenAddress = "0xe7900239e9332060dc975ed6f0cc5f0129d924cf"
+//        val tokenId = "3"
+//        nftService.createNftProcess(tokenId,tokenAddress, ChainType.POLYGON_MAINNET).block()
+//    }
 
     @Test
     fun test3() {
@@ -47,11 +47,11 @@ class NftTest(
         collectionRepository.insert(Collection(tokenName)).block()
     }
 
-    @Test
-    fun test4() {
-        val tokenAddress = "0xe4a8bfdc0684f62b4cfb43165021814f059819ef"
-        val tokenId = "4617"
-        val res = nftService.findOrCreateNft(tokenId,tokenAddress,ChainType.POLYGON_MAINNET).block()
-        println(res.toString())
-    }
+//    @Test
+//    fun test4() {
+//        val tokenAddress = "0xe4a8bfdc0684f62b4cfb43165021814f059819ef"
+//        val tokenId = "4617"
+//        val res = nftService.findOrCreateNft(tokenId,tokenAddress,ChainType.POLYGON_MAINNET).block()
+//        println(res.toString())
+//    }
 }

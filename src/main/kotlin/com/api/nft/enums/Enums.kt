@@ -7,3 +7,8 @@ enum class ChainType{
         ETHREUM_SEPOLIA,
         POLYGON_MUMBAI,
 }
+
+enum class NetworkType{
+        ETHEREUM,
+        POLYGON,
+}

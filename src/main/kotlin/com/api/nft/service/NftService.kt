@@ -1,14 +1,12 @@
 package com.api.nft.service
 
-import com.api.nft.controller.dto.NftBatchRequest
 import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
-import com.api.nft.service.external.dto.AttributeResponse
-import com.api.nft.service.external.dto.MetadataResponse
-import com.api.nft.service.external.dto.NftResponse
-import com.api.nft.service.external.moralis.MoralisApiService
+import com.api.nft.service.external.dto.AttributeData
+import com.api.nft.service.external.dto.MetadataData
+import com.api.nft.service.external.dto.NftData
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
@@ -16,66 +14,62 @@ import reactor.core.publisher.Mono
 
 @Service
 class NftService(
-    private val moralisApiService: MoralisApiService,
     private val nftRepository: NftRepository,
     private val collectionService: CollectionService,
     private val metadataService: MetadataService,
     private val attributeService: AttributeService,
 ) {
 
-    fun getBatchNftList(reqeusts : List<NftBatchRequest>): Flux<NftMetadataDto> {
-        return Flux.fromIterable(reqeusts)
-            .flatMap {
-                findOrCreateNft(it.tokenId,it.tokenAddress,it.chainType)
-            }
+    @Transactional
+    fun saveNfts(requests: List<NftData>, chainType: ChainType): Flux<NftMetadataDto> {
+        return Flux.fromIterable(requests)
+            .flatMap { findOrCreateNft(it, chainType) }
+    }
+
+    fun findAllById(ids: List<Long>): Flux<NftMetadataDto> {
+        return nftRepository.findAllByNftJoinMetadata(ids)
     }
 
     @Transactional
-    fun findOrCreateNft(tokenId: String, tokenAddress: String, chainType: ChainType): Mono<NftMetadataDto> {
-       return nftRepository.findByTokenAddressAndTokenId(tokenAddress,tokenId)
+    fun findOrCreateNft(request:NftData, chainType: ChainType): Mono<NftMetadataDto> {
+       return nftRepository.findByTokenAddressAndTokenId(request.tokenAddress,request.tokenId)
             .switchIfEmpty(
-                createNftProcess(tokenId,tokenAddress,chainType)
+                createNftProcess(request,chainType)
             ).flatMap {
                 nftRepository.findByNftJoinMetadata(it.id!!)
             }
     }
 
-    fun createNftProcess(tokenId: String,
-                         tokenAddress: String,
+    fun createNftProcess(request: NftData,
                          chainType: ChainType
     ): Mono<Nft> {
-        val response = getNftByMoralis(tokenId, tokenAddress, chainType)
-        return response.flatMap { (nftResponse, metadataResponse, attributeResponseList) ->
-            createNft(nftResponse, metadataResponse, chainType)
+        val response = getNftData(request, chainType)
+        return response.flatMap { (nftData, metadataData, attributeDataList) ->
+            createNft(nftData, metadataData, chainType)
                 .flatMap { nft ->
-                    metadataService.createMetadata(nft.id!!, metadataResponse)
+                    metadataService.createMetadata(nft.id!!, metadataData)
                         .thenMany(attributeService.createAttribute(
                             nft.id,
-                            attributeResponseList ?: emptyList()
+                            attributeDataList ?: emptyList()
                         ))
                         .then(Mono.just(nft))
                 }
         }
     }
 
-    fun getNftByMoralis(tokenId: String,
-                        tokenAddress: String,
-                        chainType: ChainType
-    )
-    : Mono<Triple<NftResponse, MetadataResponse,List<AttributeResponse>?>> {
-       return moralisApiService.getNft(tokenAddress,tokenId,chainType)
-           .filter { !it.possibleSpam }
-           .map {
-            val metadata = MetadataResponse.toMetadataResponse(it.metadata)
-               val attributes = if (metadata != null && metadata.attributes.isNotEmpty())
-                   AttributeResponse.toAttributeResponse(metadata.attributes)
-               else null
-            Triple(it,metadata,attributes)
+    fun getNftData(request: NftData, chainType: ChainType): Mono<Triple<NftData, MetadataData, List<AttributeData>?>> {
+        return Mono.fromCallable {
+            val metadata = MetadataData.toMetadataResponse(request.metadata)
+            val attributes = metadata?.attributes?.let {
+                if (it.isNotEmpty()) AttributeData.toAttributeResponse(it) else null
+            }
+            Triple(request, metadata, attributes)
         }
     }
 
-    fun createNft(nft: NftResponse,
-                  metadata: MetadataResponse,
+
+    fun createNft(nft: NftData,
+                  metadata: MetadataData,
                   chainType: ChainType
     ): Mono<Nft> {
         return collectionService.findOrCreate(nft.name).flatMap {
@@ -86,9 +80,9 @@ class NftService(
                 chinType = chainType.toString(),
                 nftName = metadata.name,
                 collectionName = it.name,
-                ownerOf = nft.ownerOf,
                 tokenHash = nft.tokenHash,
-                amount = nft.amount.toInt()
+                amount = nft.amount.toInt(),
+                contractType = nft.contractType!!,
                 )
             )
         }

@@ -1,7 +1,7 @@
 package com.api.nft.service.external.moralis
 
 import com.api.nft.enums.ChainType
-import com.api.nft.service.external.dto.NftResponse
+import com.api.nft.service.external.dto.NftData
 
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
@@ -26,7 +26,7 @@ class MoralisApiService {
         return chain
     }
 
-    fun getNft(tokenAddress: String,tokenId: String,chainType: ChainType): Mono<NftResponse> {
+    fun getNft(tokenAddress: String,tokenId: String,chainType: ChainType): Mono<NftData> {
         val chain = queryParamByChain(chainType)
 
         return webClient.get()
@@ -38,7 +38,7 @@ class MoralisApiService {
             .header("X-API-Key", apiKey)
             .header("Accept", MediaType.APPLICATION_JSON_VALUE)
             .retrieve()
-            .bodyToMono(NftResponse::class.java)
+            .bodyToMono(NftData::class.java)
     }
 
     fun getNft1(tokenAddress: String,tokenId: String,chainType: ChainType): Mono<String> {

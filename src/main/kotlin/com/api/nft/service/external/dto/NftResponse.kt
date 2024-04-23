@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
-data class NftResponse(
+data class NftData(
     val amount: String,
     @JsonProperty("token_id")val tokenId: String,
     @JsonProperty("token_address") val tokenAddress: String,
@@ -28,7 +28,7 @@ data class NftResponse(
 )
 
 
-data class MetadataResponse(
+data class MetadataData(
     val name: String,
     val description: String,
     val image: String,
@@ -38,9 +38,9 @@ data class MetadataResponse(
     @JsonIgnoreProperties(ignoreUnknown = true) @JsonProperty("youtube_url") val youtubeUrl: String? = null,
 ){
     companion object {
-        fun toMetadataResponse(metadata: String): MetadataResponse {
+        fun toMetadataResponse(metadata: String): MetadataData {
             val mapper = jacksonObjectMapper()
-            return mapper.readValue(metadata, MetadataResponse::class.java)
+            return mapper.readValue(metadata, MetadataData::class.java)
         }
 
         fun parseImage(image: String) : String {
@@ -49,14 +49,14 @@ data class MetadataResponse(
     }
 }
 
-data class AttributeResponse(
+data class AttributeData(
     @JsonProperty("trait_type") val traitType: String?,
     val value: String?
 ) {
     companion object {
-        fun toAttributeResponse(attributes: List<Map<String, String>>): List<AttributeResponse> {
+        fun toAttributeResponse(attributes: List<Map<String, String>>): List<AttributeData> {
             return attributes.map {
-                AttributeResponse(
+                AttributeData(
                     traitType = it["trait_type"],
                     value = it["value"]
                 )

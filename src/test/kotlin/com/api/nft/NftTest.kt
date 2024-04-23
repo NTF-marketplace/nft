@@ -1,8 +1,8 @@
 package com.api.nft
 
-import com.api.nft.domain.collection.Collection
 import com.api.nft.domain.collection.repository.CollectionRepository
 import com.api.nft.enums.ChainType
+import com.api.nft.rabbitMQ.RabbitMQSender
 import com.api.nft.service.external.moralis.MoralisApiService
 import com.api.nft.service.NftService
 import org.junit.jupiter.api.Test
@@ -14,6 +14,7 @@ class NftTest(
     @Autowired private val moralisApiService: MoralisApiService,
     @Autowired private val nftService: NftService,
     @Autowired private val collectionRepository: CollectionRepository,
+    @Autowired private val rabbitMQSender: RabbitMQSender,
 ) {
 
     @Test
@@ -43,8 +44,9 @@ class NftTest(
 
     @Test
     fun test3() {
-        val tokenName = "asdasdasd"
-        collectionRepository.insert(Collection(tokenName)).block()
+//        val tokenName = "asdasdasd"
+//        collectionRepository.insert(Collection(tokenName)).block()
+        rabbitMQSender.nftsend("nmftasd")
     }
 
 //    @Test

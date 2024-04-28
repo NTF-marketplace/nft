@@ -1,4 +1,4 @@
-package com.api.nft.service
+package com.api.nft.service.api
 
 import com.api.nft.domain.attribute.Attribute
 import com.api.nft.domain.attribute.AttributeRepository

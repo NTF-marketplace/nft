@@ -1,4 +1,4 @@
-package com.api.nft.service
+package com.api.nft.service.api
 
 import com.api.nft.domain.collection.Collection
 import com.api.nft.domain.collection.repository.CollectionRepository
@@ -11,11 +11,20 @@ class CollectionService(
     private val collectionRepository: CollectionRepository,
 ) {
 
-    fun findOrCreate(name: String) : Mono<Collection> {
+    fun findOrCreate(
+        name: String,
+        logo: String?,
+        bannerImage: String?,
+    ) : Mono<Collection> {
         return collectionRepository.findByName(name)
             .switchIfEmpty(
                 Mono.defer {
-                    collectionRepository.insert(Collection(name = name))
+                    collectionRepository.insert(
+                        Collection(
+                            name = name,
+                            logo = logo,
+                            bannerImage = bannerImage,
+                            ))
                         .onErrorResume(DuplicateKeyException::class.java){
                             collectionRepository.findByName(name)
                         }

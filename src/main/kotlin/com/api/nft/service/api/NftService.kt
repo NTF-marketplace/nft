@@ -1,4 +1,4 @@
-package com.api.nft.service
+package com.api.nft.service.api
 
 import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftMetadataDto
@@ -21,6 +21,7 @@ class NftService(
     private val metadataService: MetadataService,
     private val attributeService: AttributeService,
     private val eventPublisher: ApplicationEventPublisher,
+    private val transferService: TransferService,
 ) {
 
     @Transactional
@@ -78,7 +79,7 @@ class NftService(
                   metadata: MetadataData,
                   chainType: ChainType
     ): Mono<Nft> {
-        return collectionService.findOrCreate(nft.name).flatMap {
+        return collectionService.findOrCreate(nft.name,nft.collectionLogo,nft.collectionBannerImage).flatMap {
             nftRepository.save(
                 Nft(
                 tokenId = nft.tokenId,
@@ -92,9 +93,5 @@ class NftService(
                 )
             )
         }
-    }
-
-    fun rabbitMqEventTest() {
-
     }
 }

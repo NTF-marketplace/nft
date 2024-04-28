@@ -2,7 +2,7 @@ package com.api.nft.controller
 
 import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.enums.ChainType
-import com.api.nft.service.NftService
+import com.api.nft.service.api.NftService
 import com.api.nft.service.external.dto.NftData
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

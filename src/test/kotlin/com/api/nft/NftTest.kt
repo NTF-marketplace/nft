@@ -4,7 +4,7 @@ import com.api.nft.domain.collection.repository.CollectionRepository
 import com.api.nft.enums.ChainType
 import com.api.nft.rabbitMQ.RabbitMQSender
 import com.api.nft.service.external.moralis.MoralisApiService
-import com.api.nft.service.NftService
+import com.api.nft.service.api.NftService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

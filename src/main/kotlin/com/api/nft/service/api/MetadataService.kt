@@ -1,4 +1,4 @@
-package com.api.nft.service
+package com.api.nft.service.api
 
 import com.api.nft.domain.metadata.Metadata
 import com.api.nft.domain.metadata.repository.MetadataRepository

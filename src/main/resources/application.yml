@@ -26,3 +26,6 @@ logging:
 #    root: info
 server:
   port: 8082
+
+apikey:
+  infura: "98b672d2ce9a4089a3a5cb5081dde2fa"

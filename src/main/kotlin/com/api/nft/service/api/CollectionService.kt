@@ -15,6 +15,7 @@ class CollectionService(
         name: String,
         logo: String?,
         bannerImage: String?,
+        description: String?,
     ) : Mono<Collection> {
         return collectionRepository.findByName(name)
             .switchIfEmpty(
@@ -24,6 +25,7 @@ class CollectionService(
                             name = name,
                             logo = logo,
                             bannerImage = bannerImage,
+                            description = description,
                             ))
                         .onErrorResume(DuplicateKeyException::class.java){
                             collectionRepository.findByName(name)

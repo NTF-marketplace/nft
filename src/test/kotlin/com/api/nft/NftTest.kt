@@ -5,6 +5,7 @@ import com.api.nft.enums.ChainType
 import com.api.nft.rabbitMQ.RabbitMQSender
 import com.api.nft.service.external.moralis.MoralisApiService
 import com.api.nft.service.api.NftService
+import com.api.nft.service.api.TransferService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -15,13 +16,14 @@ class NftTest(
     @Autowired private val nftService: NftService,
     @Autowired private val collectionRepository: CollectionRepository,
     @Autowired private val rabbitMQSender: RabbitMQSender,
+    @Autowired private val transferService: TransferService,
 ) {
 
     @Test
     fun test(){
         val tokenAddress = "0x57a133561c74c242a0b70af9c129126244b4869f"
         val tokenId = "4733"
-        val res =moralisApiService.getNft(tokenAddress,tokenId, ChainType.POLYGON_MAINNET).block()
+        val res =moralisApiService.getNftTransfer(tokenAddress,tokenId, ChainType.POLYGON_MAINNET).block()
         println(res)
     }
 
@@ -42,12 +44,6 @@ class NftTest(
 //        nftService.createNftProcess(tokenId,tokenAddress, ChainType.POLYGON_MAINNET).block()
 //    }
 
-    @Test
-    fun test3() {
-//        val tokenName = "asdasdasd"
-//        collectionRepository.insert(Collection(tokenName)).block()
-        rabbitMQSender.nftsend("nmftasd")
-    }
 
 //    @Test
 //    fun test4() {

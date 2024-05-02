@@ -11,5 +11,6 @@ class Collection(
     @Id val name: String,
     val logo: String?,
     @Column("banner_image")val bannerImage: String?,
+    val description : String?,
 ) {
 }

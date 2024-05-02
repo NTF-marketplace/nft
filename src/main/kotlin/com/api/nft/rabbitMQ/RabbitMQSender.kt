@@ -11,7 +11,7 @@ class RabbitMQSender(
 
     //TODO("리팩토링")
     //TODO("반환값 재정의")
-    fun nftSend(nft: Nft) {
+    fun nftSend(nft: Long) {
         rabbitTemplate.convertAndSend("nftExchange", "nftRoutingKey", nft)
     }
 }

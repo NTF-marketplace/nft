@@ -24,7 +24,7 @@ class NftService(
     private val transferService: TransferService,
 ) {
 
-    @Transactional
+
     fun saveNfts(requests: List<NftData>, chainType: ChainType): Flux<NftMetadataDto> {
         return Flux.fromIterable(requests)
             .flatMap { findOrCreateNft(it, chainType) }
@@ -34,7 +34,6 @@ class NftService(
         return nftRepository.findAllByNftJoinMetadata(ids)
     }
 
-    @Transactional
     fun findOrCreateNft(request:NftData, chainType: ChainType): Mono<NftMetadataDto> {
        return nftRepository.findByTokenAddressAndTokenId(request.tokenAddress,request.tokenId)
             .switchIfEmpty(
@@ -58,6 +57,7 @@ class NftService(
                         ))
                         .then(Mono.just(nft))
                         .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft)) }
+//                        .doOnSuccess { transferService.createTransfer(nft) }
 
                 }
         }
@@ -79,7 +79,12 @@ class NftService(
                   metadata: MetadataData,
                   chainType: ChainType
     ): Mono<Nft> {
-        return collectionService.findOrCreate(nft.name,nft.collectionLogo,nft.collectionBannerImage).flatMap {
+        return collectionService.findOrCreate(
+            nft.name,
+            nft.collectionLogo,
+            nft.collectionBannerImage,
+            metadata.description,
+            ).flatMap {
             nftRepository.save(
                 Nft(
                 tokenId = nft.tokenId,

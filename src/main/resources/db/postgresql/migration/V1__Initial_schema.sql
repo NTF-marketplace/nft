@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS collection (
     name varchar(500) PRIMARY KEY,
     logo varchar(500),
-    banner_image varchar(500)
+    banner_image varchar(500),
+    description varchar(1000)
 );
 
 CREATE TABLE IF NOT EXISTS nft (

@@ -1,8 +1,14 @@
 package com.api.nft.service.api
 
+import com.api.nft.domain.nft.Nft
+import com.api.nft.domain.trasfer.Transfer
+import com.api.nft.domain.trasfer.TransferRepository
 import com.api.nft.enums.ChainType
 import com.api.nft.properties.ApiKeysProperties
 import com.api.nft.service.TransferResponse
+import com.api.nft.service.external.dto.NftTransferData
+import com.api.nft.service.external.moralis.MoralisApiService
+import com.api.nft.util.Util.convertNetworkTypeToChainType
 import org.springframework.stereotype.Service
 import org.web3j.abi.EventEncoder
 import org.web3j.abi.TypeReference
@@ -20,72 +26,28 @@ import java.math.BigInteger
 
 @Service
 class TransferService(
-    private val apiKeysProperties: ApiKeysProperties,
+    private val moralisApiService: MoralisApiService,
+    private val transferRepository: TransferRepository,
 ) {
 
-     fun createTransfer() {
-       TODO()
-    }
 
-    private fun getFullUrl(chainType: ChainType): String {
-        val chainUrl = when (chainType) {
-            ChainType.ETHEREUM_MAINNET -> "mainnet.infura.io"
-            ChainType.POLYGON_MAINNET -> "polygon-mainnet.infura.io"
-            ChainType.ETHREUM_GOERLI -> "goerli.infura.io"
-            ChainType.ETHREUM_SEPOLIA -> "sepolia.infura.io"
-            ChainType.POLYGON_MUMBAI -> "polygon-mumbai.infura.io"
-        }
-        return "https://$chainUrl/v3/${apiKeysProperties.infura}"
-    }
+     fun createTransfer(nft: Nft)
+     {
+         moralisApiService.getNftTransfer(
+             nft.tokenAddress,
+             nft.tokenId,
+             nft.chinType.convertNetworkTypeToChainType()
+         ).map {
+          // transferRepository.save(it.toEntity(nft.id!!))
+       }
+     }
 
-    private fun getWeb3j(chainType: ChainType): Web3j {
-        return Web3j.build(HttpService(getFullUrl(chainType)))
-    }
+//    private fun NftTransferData.toEntity(nftId: Long) =
+//        Transfer(
+//            nftId = nftId,
+//            fromAddress = this.result,
+//            toAddress = this.to
+//        )
 
-
-    fun getTransactionERC721(chainType: ChainType, contractAddress: String, tokenId: String): List<TransferResponse> {
-        val web3 = getWeb3j(chainType)
-        val transferEvent = Event(
-            "Transfer",
-            listOf(
-                TypeReference.create(Address::class.java, true),
-                TypeReference.create(Address::class.java, true),
-                TypeReference.create(Uint256::class.java, true)
-            )
-        )
-
-        val eventSignature = EventEncoder.encode(transferEvent)
-
-        val filter = EthFilter(
-            DefaultBlockParameterName.EARLIEST,
-            DefaultBlockParameterName.LATEST,
-            contractAddress
-        ).addSingleTopic(eventSignature)
-            .addSingleTopic(null)
-            .addSingleTopic(null)
-            .addSingleTopic(Numeric.toHexStringWithPrefixZeroPadded(BigInteger(tokenId), 64))
-
-        val responses = mutableListOf<TransferResponse>()
-
-        try {
-            val logs = web3.ethGetLogs(filter).send()
-            logs.logs.forEach {
-                val log = it.get() as Log
-                val (from, to, token) = parseTransfer(log)
-                responses.add(TransferResponse(from, to, token))
-            }
-        } catch (e: Exception) {
-            println("Error fetching logs: ${e.message}")
-        }
-
-        return responses
-    }
-
-    private fun parseTransfer(log: Log): Triple<String, String, BigInteger> {
-        val fromAddress = "0x" + log.topics[1].substring(log.topics[1].length - 40)
-        val toAddress = "0x" + log.topics[2].substring(log.topics[2].length - 40)
-        val tokenId = Numeric.toBigInt(log.topics[3])
-        return Triple(fromAddress, toAddress, tokenId)
-    }
 }
 

@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
+//TODO("캡슐화")
 @Table("nft")
 @AllArgsConstructor
 class Nft(

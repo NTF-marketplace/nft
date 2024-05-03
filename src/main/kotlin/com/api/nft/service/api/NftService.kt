@@ -1,4 +1,4 @@
-package com.api.nft.service
+package com.api.nft.service.api
 
 import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftMetadataDto
@@ -21,9 +21,10 @@ class NftService(
     private val metadataService: MetadataService,
     private val attributeService: AttributeService,
     private val eventPublisher: ApplicationEventPublisher,
+    private val transferService: TransferService,
 ) {
 
-    @Transactional
+
     fun saveNfts(requests: List<NftData>, chainType: ChainType): Flux<NftMetadataDto> {
         return Flux.fromIterable(requests)
             .flatMap { findOrCreateNft(it, chainType) }
@@ -33,7 +34,6 @@ class NftService(
         return nftRepository.findAllByNftJoinMetadata(ids)
     }
 
-    @Transactional
     fun findOrCreateNft(request:NftData, chainType: ChainType): Mono<NftMetadataDto> {
        return nftRepository.findByTokenAddressAndTokenId(request.tokenAddress,request.tokenId)
             .switchIfEmpty(
@@ -57,6 +57,7 @@ class NftService(
                         ))
                         .then(Mono.just(nft))
                         .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft)) }
+//                        .doOnSuccess { transferService.createTransfer(nft) }
 
                 }
         }
@@ -78,7 +79,12 @@ class NftService(
                   metadata: MetadataData,
                   chainType: ChainType
     ): Mono<Nft> {
-        return collectionService.findOrCreate(nft.name).flatMap {
+        return collectionService.findOrCreate(
+            nft.name,
+            nft.collectionLogo,
+            nft.collectionBannerImage,
+            metadata.description,
+            ).flatMap {
             nftRepository.save(
                 Nft(
                 tokenId = nft.tokenId,
@@ -92,9 +98,5 @@ class NftService(
                 )
             )
         }
-    }
-
-    fun rabbitMqEventTest() {
-
     }
 }

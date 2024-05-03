@@ -1,5 +1,8 @@
 CREATE TABLE IF NOT EXISTS collection (
-    name varchar(500) PRIMARY KEY
+    name varchar(500) PRIMARY KEY,
+    logo varchar(500),
+    banner_image varchar(500),
+    description varchar(1000)
 );
 
 CREATE TABLE IF NOT EXISTS nft (
@@ -24,11 +27,19 @@ CREATE TABLE IF NOT EXISTS metadata (
 );
 
 
-CREATE TABLE IF NOt EXISTS attribute (
+CREATE TABLE IF NOT EXISTS attribute (
     id SERIAL PRIMARY KEY,
     nft_id BIGINT REFERENCES nft(id),
     trait_type varchar(255),
     value varchar(255)
+);
+
+
+CREATE TABLE IF NOT EXISTS transfer (
+    id SERIAL PRIMARY KEY,
+    nft_id BIGINT REFERENCES nft(id),
+    from_address varchar(255) not null,
+    to_address varchar(255) not null
 );
 
 

@@ -3,7 +3,6 @@ package com.api.nft.service.external.dto
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 
 data class NftData(
     val amount: String,
@@ -11,8 +10,8 @@ data class NftData(
     @JsonProperty("token_address") val tokenAddress: String,
     @JsonProperty("contract_type") val contractType: String?,
     @JsonProperty("owner_of") val ownerOf: String?,
-    @JsonProperty("last_metadata_sync") val lastMetadataSync: String,
-    @JsonProperty("last_token_uri_sync") val lastTokenUriSync: String,
+    @JsonProperty("last_metadata_sync") val lastMetadataSync: String?,
+    @JsonProperty("last_token_uri_sync") val lastTokenUriSync: String?,
     val metadata: String,
     @JsonProperty("block_number") val blockNumber: String,
     @JsonProperty("block_number_minted") val blockNumberMinted: String?,

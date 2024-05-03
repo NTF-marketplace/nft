@@ -9,6 +9,6 @@ class NftEventListener(
 
     @EventListener
     fun onNftCreated(event: NftCreatedEvent) {
-        provider.nftSend(event.nft)
+        provider.nftSend(event.nft.id!!)
     }
 }

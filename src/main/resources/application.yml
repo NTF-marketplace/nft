@@ -26,3 +26,7 @@ logging:
 #    root: info
 server:
   port: 8082
+
+apikey:
+  infura: "98b672d2ce9a4089a3a5cb5081dde2fa"
+  moralis: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImJiNmIxMWJmLWNmNzItNDg0OC04OGEyLTBjYTIwODRjN2VhMyIsIm9yZ0lkIjoiMzgzODQwIiwidXNlcklkIjoiMzk0NDAyIiwidHlwZUlkIjoiMGZlYWQ5NDctZjQwZS00MDkwLWFlNGUtOTA1ZTdmMjUxZTAzIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTA5NTIwMjYsImV4cCI6NDg2NjcxMjAyNn0.VQE60IPGiWxdp7jKLF0jzXnxrLjEpU56H4bnfhMt0Sw"

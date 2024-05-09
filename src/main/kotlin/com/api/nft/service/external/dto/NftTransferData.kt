@@ -31,6 +31,4 @@ data class  ResultData (
     val operator: String,
     @JsonProperty("possible_spam") val possibleSpam: String,
     @JsonProperty("verified_collection") val verifiedCollection : String,
-
-
 )

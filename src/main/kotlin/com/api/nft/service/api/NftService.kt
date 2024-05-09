@@ -57,7 +57,7 @@ class NftService(
                         ))
                         .then(Mono.just(nft))
                         .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft)) }
-//                        .doOnSuccess { transferService.createTransfer(nft) }
+                        .doOnSuccess { transferService.createTransfer(nft) }
 
                 }
         }

@@ -39,7 +39,9 @@ CREATE TABLE IF NOT EXISTS transfer (
     id SERIAL PRIMARY KEY,
     nft_id BIGINT REFERENCES nft(id),
     from_address varchar(255) not null,
-    to_address varchar(255) not null
+    to_address varchar(255) not null,
+    block_number bigint not null,
+    block_timestamp bigint not null
 );
 
 

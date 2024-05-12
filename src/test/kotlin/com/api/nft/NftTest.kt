@@ -1,14 +1,20 @@
 package com.api.nft
 
 import com.api.nft.domain.collection.repository.CollectionRepository
+import com.api.nft.domain.nft.repository.NftRepository
+import com.api.nft.domain.trasfer.Transfer
 import com.api.nft.enums.ChainType
 import com.api.nft.rabbitMQ.RabbitMQSender
 import com.api.nft.service.external.moralis.MoralisApiService
 import com.api.nft.service.api.NftService
 import com.api.nft.service.api.TransferService
+import com.api.nft.service.external.dto.EthLogResponse
+import com.api.nft.service.external.infura.InfuraApiService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import reactor.test.StepVerifier
+import java.math.BigInteger
 
 @SpringBootTest
 class NftTest(
@@ -17,6 +23,8 @@ class NftTest(
     @Autowired private val collectionRepository: CollectionRepository,
     @Autowired private val rabbitMQSender: RabbitMQSender,
     @Autowired private val transferService: TransferService,
+    @Autowired private val nftRepository: NftRepository,
+    @Autowired private val infuraApiService: InfuraApiService,
 ) {
 
     @Test
@@ -27,29 +35,38 @@ class NftTest(
         println(res)
     }
 
-//    @Test
-//    fun test1() {
-//        val tokenAddress = "0x57a133561c74c242a0b70af9c129126244b4869f"
-//        val tokenId = "4733"
-//        val res =nftService.getNftByMoralis(tokenId,tokenAddress, ChainType.POLYGON_MAINNET).block()
-//        println(res?.first.toString())
-//        println(res?.second.toString())
-//        println(res?.third.toString())
-//    }
-//
-//    @Test
-//    fun test2() {
-//        val tokenAddress = "0xe7900239e9332060dc975ed6f0cc5f0129d924cf"
-//        val tokenId = "3"
-//        nftService.createNftProcess(tokenId,tokenAddress, ChainType.POLYGON_MAINNET).block()
-//    }
+    @Test
+    fun createTransfer() {
+        val nft = nftRepository.findById(25).block()
+        nft?.let {
+            transferService.createTransfer(it).block()
+        } ?: error("NFT not found")
+    }
+
+    @Test
+    fun createTransferTest1() {
+        val nftMono = nftRepository.findById(22)
+
+        StepVerifier.create(nftMono)
+            .assertNext { nft ->
+                transferService.createTransfer(nft)
+            }
+            .verifyComplete()
+    }
+
+    @Test
+    fun getEth() {
+       val res = infuraApiService.getEthLogs("56498172",ChainType.POLYGON_MAINNET,"0xa3784fe9104fdc0b988769fba7459ece2fb36eea","1").block()
+        println(res.toString())
+    }
 
 
-//    @Test
-//    fun test4() {
-//        val tokenAddress = "0xe4a8bfdc0684f62b4cfb43165021814f059819ef"
-//        val tokenId = "4617"
-//        val res = nftService.findOrCreateNft(tokenId,tokenAddress,ChainType.POLYGON_MAINNET).block()
-//        println(res.toString())
-//    }
+    @Test
+    fun findOrUpdateByNftId() {
+        //56498172
+        transferService.findOrUpdateByNftId(31).blockLast()
+    }
+
+
+
 }

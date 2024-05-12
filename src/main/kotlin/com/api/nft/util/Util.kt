@@ -7,8 +7,8 @@ import java.time.format.DateTimeFormatter
 object Util {
     fun String.convertNetworkTypeToChainType(): ChainType {
         return when (this) {
-            "ETHEREUM" -> ChainType.ETHEREUM_MAINNET
-            "POLYGON" -> ChainType.POLYGON_MAINNET
+            "ETHEREUM_MAINNET" -> ChainType.ETHEREUM_MAINNET
+            "POLYGON_MAINNET" -> ChainType.POLYGON_MAINNET
             else -> throw IllegalArgumentException("Unknown network type: $this")
         }
     }

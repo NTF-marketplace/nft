@@ -11,7 +11,7 @@ class Transfer(
     @Column("from_address") val fromAddress: String,
     @Column("to_address") val toAddress: String,
     @Column("block_number") val blockNumber: Long,
-    @Column("block_timestamp") val blockTimestamp: Long,
+    @Column("block_timestamp") val blockTimestamp: Long?,
     ) {
 
 

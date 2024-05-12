@@ -43,9 +43,7 @@ class NftService(
             }
     }
 
-    fun createNftProcess(request: NftData,
-                         chainType: ChainType
-    ): Mono<Nft> {
+    fun createNftProcess(request: NftData, chainType: ChainType): Mono<Nft> {
         val response = getNftData(request, chainType)
         return response.flatMap { (nftData, metadataData, attributeDataList) ->
             createNft(nftData, metadataData, chainType)
@@ -57,8 +55,9 @@ class NftService(
                         ))
                         .then(Mono.just(nft))
                         .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft)) }
-//                        .doOnSuccess { transferService.createTransfer(nft) }
-
+                        .flatMap {
+                            transferService.createTransfer(nft).thenReturn(nft)
+                        }
                 }
         }
     }
@@ -67,7 +66,7 @@ class NftService(
     fun getNftData(request: NftData, chainType: ChainType): Mono<Triple<NftData, MetadataData, List<AttributeData>?>> {
         return Mono.fromCallable {
             val metadata = MetadataData.toMetadataResponse(request.metadata)
-            val attributes = metadata?.attributes?.let {
+            val attributes = metadata.attributes.let {
                 if (it.isNotEmpty()) AttributeData.toAttributeResponse(it) else null
             }
             Triple(request, metadata, attributes)

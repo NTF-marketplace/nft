@@ -29,7 +29,10 @@ class MoralisApiService {
         return chain
     }
 
-    fun getNftTransfer(tokenAddress: String,tokenId: String,chainType: ChainType): Mono<NftTransferData>{
+    fun getNftTransfer(tokenAddress: String,
+                       tokenId: String,
+                       chainType: ChainType
+    ): Mono<NftTransferData>{
         val chain = queryParamByChain(chainType)
 
         return webClient.get()

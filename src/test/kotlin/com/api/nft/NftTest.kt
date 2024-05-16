@@ -3,22 +3,19 @@ package com.api.nft
 import com.api.nft.domain.collection.repository.CollectionRepository
 import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftRepository
-import com.api.nft.domain.trasfer.Transfer
 import com.api.nft.enums.ChainType
-import com.api.nft.event.NftCreatedEvent
+import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.rabbitMQ.RabbitMQSender
 import com.api.nft.service.external.moralis.MoralisApiService
 import com.api.nft.service.api.NftService
 import com.api.nft.service.api.TransferService
-import com.api.nft.service.dto.NftResponse
-import com.api.nft.service.external.dto.EthLogResponse
+import com.api.nft.event.dto.NftResponse
 import com.api.nft.service.external.infura.InfuraApiService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationEventPublisher
 import reactor.test.StepVerifier
-import java.math.BigInteger
 
 @SpringBootTest
 class NftTest(
@@ -32,32 +29,6 @@ class NftTest(
     @Autowired private val eventPublisher: ApplicationEventPublisher,
 ) {
 
-    @Test
-    fun test(){
-        val tokenAddress = "0x57a133561c74c242a0b70af9c129126244b4869f"
-        val tokenId = "4733"
-        val res =moralisApiService.getNftTransfer(tokenAddress,tokenId, ChainType.POLYGON_MAINNET).block()
-        println(res)
-    }
-
-    @Test
-    fun createTransfer() {
-        val nft = nftRepository.findById(25).block()
-        nft?.let {
-            transferService.createTransfer(it).block()
-        } ?: error("NFT not found")
-    }
-
-    @Test
-    fun createTransferTest1() {
-        val nftMono = nftRepository.findById(22)
-
-        StepVerifier.create(nftMono)
-            .assertNext { nft ->
-                transferService.createTransfer(nft)
-            }
-            .verifyComplete()
-    }
 
     @Test
     fun getEth() {

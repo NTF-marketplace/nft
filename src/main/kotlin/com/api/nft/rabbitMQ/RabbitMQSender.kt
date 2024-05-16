@@ -1,6 +1,6 @@
 package com.api.nft.rabbitMQ
 
-import com.api.nft.service.dto.NftResponse
+import com.api.nft.event.dto.NftResponse
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Service
 

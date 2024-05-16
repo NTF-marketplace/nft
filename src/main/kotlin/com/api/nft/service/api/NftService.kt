@@ -4,8 +4,8 @@ import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
-import com.api.nft.event.NftCreatedEvent
-import com.api.nft.service.dto.NftResponse
+import com.api.nft.event.dto.NftCreatedEvent
+import com.api.nft.event.dto.NftResponse
 import com.api.nft.service.external.dto.AttributeData
 import com.api.nft.service.external.dto.MetadataData
 import com.api.nft.service.external.dto.NftData

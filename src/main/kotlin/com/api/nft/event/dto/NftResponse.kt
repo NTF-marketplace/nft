@@ -1,4 +1,4 @@
-package com.api.nft.service.dto
+package com.api.nft.event.dto
 
 data class NftResponse(
     val id : Long,

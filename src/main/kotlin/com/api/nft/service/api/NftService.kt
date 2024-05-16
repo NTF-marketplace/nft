@@ -5,12 +5,12 @@ import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
 import com.api.nft.event.NftCreatedEvent
+import com.api.nft.service.dto.NftResponse
 import com.api.nft.service.external.dto.AttributeData
 import com.api.nft.service.external.dto.MetadataData
 import com.api.nft.service.external.dto.NftData
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -54,7 +54,7 @@ class NftService(
                             attributeDataList ?: emptyList()
                         ))
                         .then(Mono.just(nft))
-                        .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft)) }
+                        .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft.toResponse())) }
                         .flatMap {
                             transferService.createTransfer(nft).thenReturn(nft)
                         }
@@ -62,6 +62,14 @@ class NftService(
         }
     }
 
+    private fun Nft.toResponse() = NftResponse(
+        id =  this.id!!,
+        tokenId = this.tokenId,
+        tokenAddress = this.tokenAddress,
+        chainType = this.chinType,
+        nftName = this.nftName,
+        collectionName = this.collectionName
+    )
 
     fun getNftData(request: NftData, chainType: ChainType): Mono<Triple<NftData, MetadataData, List<AttributeData>?>> {
         return Mono.fromCallable {

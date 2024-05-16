@@ -89,8 +89,6 @@ class TransferService(
             }
     }
 
-
-
     private fun parseAddress(address: String): String {
         return "0x" + address.substring(26).padStart(40, '0')
     }

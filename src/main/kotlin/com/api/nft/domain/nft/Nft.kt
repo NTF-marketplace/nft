@@ -14,7 +14,7 @@ class Nft(
     @Id val id: Long? = null,
     @Column("token_id") val tokenId: String,
     @Column("token_address") val tokenAddress: String,
-    @Column("chain_type") val chinType: ChainType,
+    @Column("chain_type") val chainType: ChainType,
     @Column("contract_type") val contractType: ContractType,
     @Column("nft_name")val nftName: String?,
     @Column("token_hash")val tokenHash: String?,

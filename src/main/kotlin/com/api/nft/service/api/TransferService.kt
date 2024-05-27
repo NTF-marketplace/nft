@@ -29,7 +29,7 @@ class TransferService(
         return moralisApiService.getNftTransfer(
             nft.tokenAddress,
             nft.tokenId,
-            nft.chinType
+            nft.chainType
         ).flatMapMany {
             Flux.fromIterable(it.result)
         }.map {
@@ -64,13 +64,13 @@ class TransferService(
         val fromBlock = transfer.blockNumber + 1
         return infuraApiService.getEthLogs(
             fromBlock.toString(),
-            nft.chinType,
+            nft.chainType,
             nft.tokenAddress,
             nft.tokenId
         ).flatMapMany { ethLogResponses ->
             Flux.fromIterable(ethLogResponses)
         }.flatMap { ethLogResponse ->
-            ethLogResponse.toTransferEntity(nft.id!!, nft.chinType)
+            ethLogResponse.toTransferEntity(nft.id!!, nft.chainType)
                 .flatMap {
                     transferRepository.save(it)
                 }

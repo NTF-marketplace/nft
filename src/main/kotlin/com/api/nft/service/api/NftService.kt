@@ -34,7 +34,7 @@ class NftService(
     }
 
     fun findOrCreateNft(tokenAddress: String,tokenId: String, chainType: ChainType): Mono<NftResponse> {
-        return nftRepository.findByTokenAddressAndTokenIdAndChinType(tokenAddress,tokenId,chainType)
+        return nftRepository.findByTokenAddressAndTokenIdAndChainType(tokenAddress,tokenId,chainType)
             .switchIfEmpty(
                 moralisApiService.getNFTMetadata(tokenAddress,tokenId,chainType)
                     .flatMap { createNftProcess(it,chainType) }
@@ -47,7 +47,6 @@ class NftService(
             .flatMapMany { Flux.fromIterable(it.result) }
             .filter { it.contractType == "ERC721"}
             .flatMap { findOrCreateNft(it.tokenAddress, it.tokenId, chainType) }
-
     }
 
 
@@ -74,9 +73,7 @@ class NftService(
         id =  this.id!!,
         tokenId = this.tokenId,
         tokenAddress = this.tokenAddress,
-        chainType = this.chinType,
-        nftName = this.nftName,
-        collectionName = this.collectionName
+        chainType = this.chainType,
     )
 
     fun getNftData(request: NftData, chainType: ChainType): Mono<Triple<NftData, NftMetadata, List<NftAttribute>?>> {
@@ -96,15 +93,15 @@ class NftService(
     ): Mono<Nft> {
         return collectionService.findOrCreate(
             nft.name,
-            nft.collectionLogo,
-            nft.collectionBannerImage,
+            nft.collectionLogo ?: metadata?.image,
+            nft.collectionBannerImage ?: metadata?.image,
             metadata?.description,
             ).flatMap {
             nftRepository.save(
                 Nft(
                 tokenId = nft.tokenId,
                 tokenAddress = nft.tokenAddress,
-                chinType = chainType,
+                chainType = chainType,
                 nftName = metadata?.name,
                 collectionName = it.name,
                 tokenHash = nft.tokenHash,

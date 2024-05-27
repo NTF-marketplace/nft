@@ -50,7 +50,7 @@ class NftTest(
             id = 1,
             tokenId = "hello",
             tokenAddress = "helloAddress",
-            chinType = ChainType.POLYGON_MAINNET,
+            chainType = ChainType.POLYGON_MAINNET,
             contractType = ContractType.ERC721,
             nftName = "nftName",
             tokenHash = null,
@@ -66,9 +66,7 @@ class NftTest(
         id =  this.id!!,
         tokenId = this.tokenId,
         tokenAddress = this.tokenAddress,
-        chainType = this.chinType,
-        nftName = this.nftName,
-        collectionName = this.collectionName
+        chainType = this.chainType,
     )
 
 
@@ -76,7 +74,6 @@ class NftTest(
     fun getByWalletNft() {
         val wallet = "0x01b72b4aa3f66f213d62d53e829bc172a6a72867"
         val res= nftService.getByWalletNft(wallet,ChainType.POLYGON_MAINNET).blockLast()
-        println(res?.nftName)
         println(res?.tokenId)
         println(res?.tokenAddress)
 

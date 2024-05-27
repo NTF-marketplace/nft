@@ -9,7 +9,7 @@ data class NftMetadataDto(
     val tokenId: String,
     val tokenAddress: String,
     val contractType: ContractType,
-    val chinType: ChainType,
+    val chainType: ChainType,
     val nftName: String,
     val collectionName: String,
     val image: String,

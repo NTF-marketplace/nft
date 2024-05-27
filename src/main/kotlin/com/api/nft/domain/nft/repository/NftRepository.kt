@@ -7,5 +7,5 @@ import reactor.core.publisher.Mono
 
 interface NftRepository : ReactiveCrudRepository<Nft,Long>, NftRepositorySupport {
 
-    fun findByTokenAddressAndTokenIdAndChinType(tokenAddress: String, tokenId: String,chainType: ChainType): Mono<Nft>
+    fun findByTokenAddressAndTokenIdAndChainType(tokenAddress: String, tokenId: String,chainType: ChainType): Mono<Nft>
 }

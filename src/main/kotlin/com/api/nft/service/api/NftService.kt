@@ -4,11 +4,14 @@ import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
+import com.api.nft.enums.ContractType
 import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.event.dto.NftResponse
-import com.api.nft.service.external.dto.AttributeData
-import com.api.nft.service.external.dto.MetadataData
+import com.api.nft.service.external.dto.NftAttribute
 import com.api.nft.service.external.dto.NftData
+import com.api.nft.service.external.dto.NftMetadata
+import com.api.nft.service.external.infura.InfuraApiService
+import com.api.nft.service.external.moralis.MoralisApiService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -22,26 +25,30 @@ class NftService(
     private val attributeService: AttributeService,
     private val eventPublisher: ApplicationEventPublisher,
     private val transferService: TransferService,
+    private val moralisApiService: MoralisApiService
 ) {
 
-
-    fun saveNfts(requests: List<NftData>, chainType: ChainType): Flux<NftMetadataDto> {
-        return Flux.fromIterable(requests)
-            .flatMap { findOrCreateNft(it, chainType) }
-    }
 
     fun findAllById(ids: List<Long>): Flux<NftMetadataDto> {
         return nftRepository.findAllByNftJoinMetadata(ids)
     }
 
-    fun findOrCreateNft(request:NftData, chainType: ChainType): Mono<NftMetadataDto> {
-       return nftRepository.findByTokenAddressAndTokenId(request.tokenAddress,request.tokenId)
+    fun findOrCreateNft(tokenAddress: String,tokenId: String, chainType: ChainType): Mono<NftResponse> {
+        return nftRepository.findByTokenAddressAndTokenIdAndChainType(tokenAddress,tokenId,chainType)
             .switchIfEmpty(
-                createNftProcess(request,chainType)
-            ).flatMap {
-                nftRepository.findByNftJoinMetadata(it.id!!)
-            }
+                moralisApiService.getNFTMetadata(tokenAddress,tokenId,chainType)
+                    .flatMap { createNftProcess(it,chainType) }
+            ).map { it.toResponse() }
+
     }
+
+    fun getByWalletNft(wallet: String,chainType: ChainType): Flux<NftResponse> {
+        return moralisApiService.getNFTsByAddress(wallet, chainType)
+            .flatMapMany { Flux.fromIterable(it.result) }
+            .filter { it.contractType == "ERC721"}
+            .flatMap { findOrCreateNft(it.tokenAddress, it.tokenId, chainType) }
+    }
+
 
     fun createNftProcess(request: NftData, chainType: ChainType): Mono<Nft> {
         val response = getNftData(request, chainType)
@@ -66,16 +73,14 @@ class NftService(
         id =  this.id!!,
         tokenId = this.tokenId,
         tokenAddress = this.tokenAddress,
-        chainType = this.chinType,
-        nftName = this.nftName,
-        collectionName = this.collectionName
+        chainType = this.chainType,
     )
 
-    fun getNftData(request: NftData, chainType: ChainType): Mono<Triple<NftData, MetadataData, List<AttributeData>?>> {
+    fun getNftData(request: NftData, chainType: ChainType): Mono<Triple<NftData, NftMetadata, List<NftAttribute>?>> {
         return Mono.fromCallable {
-            val metadata = MetadataData.toMetadataResponse(request.metadata)
+            val metadata = NftMetadata.toMetadataResponse(request.metadata)
             val attributes = metadata.attributes.let {
-                if (it.isNotEmpty()) AttributeData.toAttributeResponse(it) else null
+                if (it.isNotEmpty()) NftAttribute.toAttributeResponse(it) else null
             }
             Triple(request, metadata, attributes)
         }
@@ -83,27 +88,35 @@ class NftService(
 
 
     fun createNft(nft: NftData,
-                  metadata: MetadataData,
+                  metadata: NftMetadata?,
                   chainType: ChainType
     ): Mono<Nft> {
         return collectionService.findOrCreate(
             nft.name,
-            nft.collectionLogo,
-            nft.collectionBannerImage,
-            metadata.description,
+            nft.collectionLogo ?: metadata?.image,
+            nft.collectionBannerImage ?: metadata?.image,
+            metadata?.description,
             ).flatMap {
             nftRepository.save(
                 Nft(
                 tokenId = nft.tokenId,
                 tokenAddress = nft.tokenAddress,
-                chinType = chainType.toString(),
-                nftName = metadata.name,
+                chainType = chainType,
+                nftName = metadata?.name,
                 collectionName = it.name,
                 tokenHash = nft.tokenHash,
-                amount = nft.amount.toInt(),
-                contractType = nft.contractType!!,
+                amount = nft.amount?.toInt() ?: 0,
+                contractType = nft.contractType.toContractEnum(),
                 )
             )
+        }
+    }
+
+    fun String.toContractEnum() : ContractType {
+        return when(this) {
+            "ERC721" -> ContractType.ERC721
+            "ERC1155" -> ContractType.ERC1155
+            else -> throw IllegalArgumentException("not support contractType")
         }
     }
 }

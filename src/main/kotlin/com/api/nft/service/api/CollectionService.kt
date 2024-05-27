@@ -30,9 +30,7 @@ class CollectionService(
                         .onErrorResume(DuplicateKeyException::class.java){
                             collectionRepository.findByName(name)
                         }
-
                 }
-
             )
     }
 }

@@ -4,6 +4,7 @@ import com.api.nft.domain.collection.repository.CollectionRepository
 import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
+import com.api.nft.enums.ContractType
 import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.rabbitMQ.RabbitMQSender
 import com.api.nft.service.external.moralis.MoralisApiService
@@ -49,8 +50,8 @@ class NftTest(
             id = 1,
             tokenId = "hello",
             tokenAddress = "helloAddress",
-            chinType = "POLYGON",
-            contractType = "helloContractType",
+            chainType = ChainType.POLYGON_MAINNET,
+            contractType = ContractType.ERC721,
             nftName = "nftName",
             tokenHash = null,
             collectionName = "nftCollection",
@@ -65,13 +66,18 @@ class NftTest(
         id =  this.id!!,
         tokenId = this.tokenId,
         tokenAddress = this.tokenAddress,
-        chainType = this.chinType,
-        nftName = this.nftName,
-        collectionName = this.collectionName
+        chainType = this.chainType,
     )
 
 
+    @Test
+    fun getByWalletNft() {
+        val wallet = "0x01b72b4aa3f66f213d62d53e829bc172a6a72867"
+        val res= nftService.getByWalletNft(wallet,ChainType.POLYGON_MAINNET).blockLast()
+        println(res?.tokenId)
+        println(res?.tokenAddress)
 
+    }
 
 
 

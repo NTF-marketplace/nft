@@ -4,6 +4,7 @@ import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
+import com.api.nft.enums.ContractType
 import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.event.dto.NftResponse
 import com.api.nft.service.external.dto.AttributeData
@@ -34,6 +35,7 @@ class NftService(
         return nftRepository.findAllByNftJoinMetadata(ids)
     }
 
+    // 리팩토링
     fun findOrCreateNft(request:NftData, chainType: ChainType): Mono<NftMetadataDto> {
        return nftRepository.findByTokenAddressAndTokenId(request.tokenAddress,request.tokenId)
             .switchIfEmpty(
@@ -96,14 +98,22 @@ class NftService(
                 Nft(
                 tokenId = nft.tokenId,
                 tokenAddress = nft.tokenAddress,
-                chinType = chainType.toString(),
+                chinType = chainType,
                 nftName = metadata.name,
                 collectionName = it.name,
                 tokenHash = nft.tokenHash,
                 amount = nft.amount.toInt(),
-                contractType = nft.contractType!!,
+                contractType = nft.contractType.toContractEnum(),
                 )
             )
+        }
+    }
+
+    fun String.toContractEnum() : ContractType {
+        return when(this) {
+            "ERC721" -> ContractType.ERC721
+            "ERC1155" -> ContractType.ERC1155
+            else -> throw IllegalArgumentException("not support contractType")
         }
     }
 }

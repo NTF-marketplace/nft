@@ -29,7 +29,7 @@ class TransferService(
         return moralisApiService.getNftTransfer(
             nft.tokenAddress,
             nft.tokenId,
-            nft.chinType.convertNetworkTypeToChainType()
+            nft.chinType
         ).flatMapMany {
             Flux.fromIterable(it.result)
         }.map {
@@ -49,6 +49,7 @@ class TransferService(
             blockTimestamp = this.blockTimestamp.toEpochMilli()
         )
 
+    // 동시성 이슈 체크
     fun findOrUpdateByNftId(nftId: Long): Flux<Transfer> {
         return nftRepository.findById(nftId).flatMapMany { nft ->
             transferRepository.findByNftIdOrderByBlockTimestampDesc(nftId).next()
@@ -63,13 +64,13 @@ class TransferService(
         val fromBlock = transfer.blockNumber + 1
         return infuraApiService.getEthLogs(
             fromBlock.toString(),
-            nft.chinType.convertNetworkTypeToChainType(),
+            nft.chinType,
             nft.tokenAddress,
             nft.tokenId
         ).flatMapMany { ethLogResponses ->
             Flux.fromIterable(ethLogResponses)
         }.flatMap { ethLogResponse ->
-            ethLogResponse.toTransferEntity(nft.id!!, nft.chinType.convertNetworkTypeToChainType())
+            ethLogResponse.toTransferEntity(nft.id!!, nft.chinType)
                 .flatMap {
                     transferRepository.save(it)
                 }

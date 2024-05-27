@@ -8,7 +8,7 @@ data class NftData(
     val amount: String,
     @JsonProperty("token_id")val tokenId: String,
     @JsonProperty("token_address") val tokenAddress: String,
-    @JsonProperty("contract_type") val contractType: String?,
+    @JsonProperty("contract_type") val contractType: String,
     @JsonProperty("owner_of") val ownerOf: String?,
     @JsonProperty("last_metadata_sync") val lastMetadataSync: String?,
     @JsonProperty("last_token_uri_sync") val lastTokenUriSync: String?,
@@ -25,7 +25,6 @@ data class NftData(
     @JsonProperty("collection_logo") val collectionLogo: String?,
     @JsonProperty("collection_banner_image") val collectionBannerImage: String?,
 )
-
 
 data class MetadataData(
     val name: String,

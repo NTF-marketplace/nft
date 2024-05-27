@@ -1,3 +1,19 @@
+CREATE TYPE contract_type AS ENUM(
+    'ERC721',
+    'ERC1155'
+    );
+
+CREATE TYPE  chain_type AS ENUM (
+    'ETHEREUM_MAINNET',
+    'LINEA_MAINNET',
+    'LINEA_SEPOLIA',
+    'POLYGON_MAINNET',
+    'ETHEREUM_HOLESKY',
+    'ETHEREUM_SEPOLIA',
+    'POLYGON_AMOY'
+    );
+
+
 CREATE TABLE IF NOT EXISTS collection (
     name varchar(500) PRIMARY KEY,
     logo varchar(500),
@@ -9,9 +25,9 @@ CREATE TABLE IF NOT EXISTS nft (
     id SERIAL PRIMARY KEY,
     token_id VARCHAR(255) NOT NULL,
     token_address VARCHAR(255) NOT NULL,
-    chain_type varchar(100) NOT NULL,
+    chain_type chain_type NOT NULL,
     nft_name varchar(255) NOT NULL,
-    contract_type varchar(255) NOT NULL,
+    contract_type contract_type NOT NULL,
     token_hash varchar(300),
     amount INT,
     collection_name varchar(500) REFERENCES collection(name)

@@ -4,6 +4,7 @@ import com.api.nft.domain.collection.repository.CollectionRepository
 import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
+import com.api.nft.enums.ContractType
 import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.rabbitMQ.RabbitMQSender
 import com.api.nft.service.external.moralis.MoralisApiService
@@ -49,8 +50,8 @@ class NftTest(
             id = 1,
             tokenId = "hello",
             tokenAddress = "helloAddress",
-            chinType = "POLYGON",
-            contractType = "helloContractType",
+            chinType = ChainType.POLYGON_MAINNET,
+            contractType = ContractType.ERC721,
             nftName = "nftName",
             tokenHash = null,
             collectionName = "nftCollection",

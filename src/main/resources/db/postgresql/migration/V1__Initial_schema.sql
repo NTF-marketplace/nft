@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS nft (
     token_id VARCHAR(255) NOT NULL,
     token_address VARCHAR(255) NOT NULL,
     chain_type chain_type NOT NULL,
-    nft_name varchar(255) NOT NULL,
+    nft_name varchar(255),
     contract_type contract_type NOT NULL,
     token_hash varchar(300),
     amount INT,

@@ -26,11 +26,11 @@ class NftController(
     private val transferService: TransferService,
 ) {
 
-    @PostMapping("/save/{chainType}")
-    fun save(@PathVariable chainType: ChainType,@RequestBody requests: List<NftData>): Flux<NftMetadataDto> {
-        return nftService.saveNfts(requests,chainType)
-
-    }
+    // @PostMapping("/save/{chainType}")
+    // fun save(@PathVariable chainType: ChainType,@RequestBody requests: List<NftData>): Flux<NftMetadataDto> {
+    //     return nftService.saveNfts(requests,chainType)
+    //
+    // }
 
     @GetMapping
     fun getAllByIds(@RequestParam nftIds: List<Long>): Flux<NftMetadataDto> {

@@ -1,14 +1,12 @@
 package com.api.nft.service.external.moralis
 
 import com.api.nft.enums.ChainType
+import com.api.nft.service.external.dto.NFTByWalletResponse
 import com.api.nft.service.external.dto.NftData
 import com.api.nft.service.external.dto.NftTransferData
-
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.bodyToMono
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
@@ -49,10 +47,35 @@ class MoralisApiService {
             .bodyToMono(NftTransferData::class.java)
     }
 
-
-    fun getNftMetadata() {
-
+    fun getNFTsByAddress(walletAddress: String,chainType: ChainType): Mono<NFTByWalletResponse> {
+        val chain = queryParamByChain(chainType)
+        return webClient.get()
+            .uri {
+                it.path("/v2.2/${walletAddress}/nft")
+                it.queryParam("chain", chain)
+                it.queryParam("exclude_spam", true)
+                it.build()
+            }
+            .header("X-API-Key", apiKey)
+            .header("Accept", MediaType.APPLICATION_JSON_VALUE)
+            .retrieve()
+            .bodyToMono(NFTByWalletResponse::class.java)
     }
+
+    fun getNFTMetadata(tokenAddress: String,tokenId:String,chainType: ChainType): Mono<NftData> {
+        val chain = queryParamByChain(chainType)
+        return webClient.get()
+            .uri {
+                it.path("/v2.2/nft/${tokenAddress}/${tokenId}")
+                it.queryParam("chain", chain)
+                it.build()
+            }
+            .header("X-API-Key", apiKey)
+            .header("Accept", MediaType.APPLICATION_JSON_VALUE)
+            .retrieve()
+            .bodyToMono(NftData::class.java)
+    }
+
 
 
     companion object {

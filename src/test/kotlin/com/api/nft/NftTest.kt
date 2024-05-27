@@ -72,7 +72,15 @@ class NftTest(
     )
 
 
+    @Test
+    fun getByWalletNft() {
+        val wallet = "0x01b72b4aa3f66f213d62d53e829bc172a6a72867"
+        val res= nftService.getByWalletNft(wallet,ChainType.POLYGON_MAINNET).blockLast()
+        println(res?.nftName)
+        println(res?.tokenId)
+        println(res?.tokenAddress)
 
+    }
 
 
 

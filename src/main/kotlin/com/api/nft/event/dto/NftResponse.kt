@@ -7,6 +7,6 @@ data class NftResponse(
     val tokenId: String,
     val tokenAddress: String,
     val chainType: ChainType,
-    val nftName: String,
+    val nftName: String?,
     val collectionName: String
 )

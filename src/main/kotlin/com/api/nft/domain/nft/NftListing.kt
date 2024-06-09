@@ -11,4 +11,8 @@ data class NftListing(
     val price: BigDecimal,
     val tokenType: TokenType,
     val nftId: Long,
-)
+){
+    fun update(newPrice: BigDecimal,new_tokenType: TokenType): NftListing {
+        return this.copy(price = newPrice, tokenType = new_tokenType)
+    }
+}

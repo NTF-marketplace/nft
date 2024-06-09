@@ -11,6 +11,6 @@ class RabbitMQReceiver(
 ) {
     @RabbitListener(queues = ["listingQueue"])
     fun listingMessage(listing: ListingResponse){
-        nftListingService.update(listing)
+        nftListingService.update(listing).subscribe()
     }
 }

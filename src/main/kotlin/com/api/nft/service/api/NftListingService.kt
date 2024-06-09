@@ -38,4 +38,8 @@ class NftListingService(
             )
         )
     }
+
+    fun batchDelete(nftIds: List<Long>): Mono<Void> {
+        return nftListingRepository.deleteAllByNftIdIn(nftIds)
+    }
 }

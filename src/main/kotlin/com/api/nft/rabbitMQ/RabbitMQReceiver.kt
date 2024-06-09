@@ -13,4 +13,10 @@ class RabbitMQReceiver(
     fun listingMessage(listing: ListingResponse){
         nftListingService.update(listing).subscribe()
     }
+
+    @RabbitListener(queues = ["listingCancelQueue"])
+    fun listingCancelMessage(nftIds: List<Long>){
+        println("ids: " + nftIds.toList())
+        nftListingService.batchDelete(nftIds).subscribe()
+    }
 }

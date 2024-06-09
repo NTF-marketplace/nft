@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor
 
 @Table("attribute")
 @AllArgsConstructor
-class Attribute(
+data class Attribute(
     @Id val id: Long? = null,
     val nftId : Long,
     val traitType : String? = null,

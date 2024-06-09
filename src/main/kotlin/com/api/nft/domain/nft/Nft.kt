@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table
 //TODO("캡슐화")
 @Table("nft")
 @AllArgsConstructor
-class Nft(
+data class Nft(
     @Id val id: Long? = null,
     @Column("token_id") val tokenId: String,
     @Column("token_address") val tokenAddress: String,

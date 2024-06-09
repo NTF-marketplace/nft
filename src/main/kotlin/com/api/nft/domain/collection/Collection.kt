@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Column
 
 @Table("collection")
 @AllArgsConstructor
-class Collection(
+data class Collection(
     @Id val name: String,
     val logo: String?,
     @Column("banner_image")val bannerImage: String?,

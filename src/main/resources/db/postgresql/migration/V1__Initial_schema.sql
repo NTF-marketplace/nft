@@ -13,6 +13,14 @@ CREATE TYPE  chain_type AS ENUM (
     'POLYGON_AMOY'
     );
 
+CREATE TYPE token_type AS ENUM (
+    'MATIC',
+    'BTC',
+    'ETH',
+    'SAND'
+    );
+
+
 
 CREATE TABLE IF NOT EXISTS collection (
     name varchar(500) PRIMARY KEY,
@@ -60,6 +68,12 @@ CREATE TABLE IF NOT EXISTS transfer (
     block_timestamp bigint not null
 );
 
+CREATE TABLE IF NOT EXISTS nft_listing (
+    id SERIAL PRIMARY KEY,
+    nft_id BIGINT REFERENCES nft(id),
+    price DECIMAL(19, 4) NOT NULL,
+    token_type token_type
+);
 
 
 

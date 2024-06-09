@@ -20,3 +20,7 @@ enum class NetworkType{
 enum class ContractType{
         ERC721, ERC1155
 }
+
+enum class TokenType {
+        SAND, MATIC, ETH, BTC
+}

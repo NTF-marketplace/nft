@@ -5,12 +5,14 @@ import com.api.nft.domain.nft.Nft
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
 import com.api.nft.enums.ContractType
+import com.api.nft.enums.TokenType
 import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.rabbitMQ.RabbitMQSender
 import com.api.nft.service.external.moralis.MoralisApiService
 import com.api.nft.service.api.NftService
 import com.api.nft.service.api.TransferService
 import com.api.nft.event.dto.NftResponse
+import com.api.nft.service.external.binance.BinanceApiService
 import com.api.nft.service.external.infura.InfuraApiService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,6 +30,7 @@ class NftTest(
     @Autowired private val nftRepository: NftRepository,
     @Autowired private val infuraApiService: InfuraApiService,
     @Autowired private val eventPublisher: ApplicationEventPublisher,
+    @Autowired private val binanceApiService: BinanceApiService,
 ) {
 
 
@@ -77,6 +80,13 @@ class NftTest(
         println(res?.tokenId)
         println(res?.tokenAddress)
 
+    }
+
+    @Test
+    fun binanceTest() {
+        val res = binanceApiService.getTickerPrice(TokenType.ETH).block()
+        println(res?.symbol)
+        println(res?.price)
     }
 
 

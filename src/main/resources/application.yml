@@ -12,12 +12,20 @@ spring:
     url: r2dbc:postgresql://localhost:5434/nft
     username: nft
     password: nft
-
   rabbitmq:
     host: localhost
     port: 5672
     username: closeSea
     password: closeSeaP@ssword
+  data:
+    redis:
+      cluster:
+        nodes: 172.24.0.2:6379,172.24.0.3:6379,172.24.0.4:6379
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
 
 logging:
   level:

@@ -49,7 +49,6 @@ class TransferService(
             blockTimestamp = this.blockTimestamp.toEpochMilli()
         )
 
-    // 동시성 이슈 체크
     fun findOrUpdateByNftId(nftId: Long): Flux<Transfer> {
         return nftRepository.findById(nftId).flatMapMany { nft ->
             transferRepository.findByNftIdOrderByBlockTimestampDesc(nftId).next()

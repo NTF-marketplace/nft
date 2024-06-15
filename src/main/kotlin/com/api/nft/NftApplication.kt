@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-@EnableScheduling
+//@EnableScheduling
 class NftApplication
 
 fun main(args: Array<String>) {

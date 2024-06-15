@@ -1,14 +1,15 @@
 package com.api.nft.service.external.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class NftTransferData(
     val page: String,
-    @JsonProperty("page_size")val pageSize: String,
+    @JsonProperty("page_size")val pageSize: String?,
     val cursor: String?,
     val result: List<ResultData>,
     @JsonProperty("block_exists") val blockExists: Boolean,
-    @JsonProperty("index_complete") val indexComplete: Boolean
+    @JsonIgnoreProperties(ignoreUnknown = true) @JsonProperty("index_complete") val indexComplete: Boolean
 )
 
 data class  ResultData (
@@ -29,6 +30,7 @@ data class  ResultData (
     @JsonProperty("transaction_index") val transactionIndex: String,
     @JsonProperty("log_index") val logIndex: String,
     val operator: String?,
-    @JsonProperty("possible_spam") val possibleSpam: String,
+    @JsonProperty("possible_spam") val possibleSpam: Boolean,
     @JsonProperty("verified_collection") val verifiedCollection : String,
+    @JsonProperty("verified") val verified : Int,
 )

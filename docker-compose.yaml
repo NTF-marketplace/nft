@@ -22,3 +22,130 @@ services:
       - '15672:15672'
     volumes:
       - ./rabbitmq_data:/var/lib/rabbitmq
+
+  redis-1:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6379:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.2
+    volumes:
+      - redis1_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+  redis-2:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6380:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.3
+    volumes:
+      - redis2_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+
+  redis-3:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6381:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.4
+    volumes:
+      - redis3_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+  redis-4:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6382:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.5
+    volumes:
+      - redis4_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+  redis-5:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6383:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.6
+    volumes:
+      - redis5_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+  redis-6:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6384:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.7
+    volumes:
+      - redis6_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+  redis-7:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6385:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.8
+    volumes:
+      - redis7_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+  redis-8:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6386:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.9
+    volumes:
+      - redis8_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+  redis-9:
+    image: redis:latest
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+    ports:
+      - "6387:6379"
+    networks:
+      redis-cluster:
+        ipv4_address: 172.24.0.10
+    volumes:
+      - redis9_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+networks:
+  redis-cluster:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+
+volumes:
+  redis1_data:
+  redis2_data:
+  redis3_data:
+  redis4_data:
+  redis5_data:
+  redis6_data:
+  redis7_data:
+  redis8_data:
+  redis9_data:

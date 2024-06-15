@@ -28,12 +28,6 @@ class NftController(
     private val transferService: TransferService,
 ) {
 
-    // @PostMapping("/save/{chainType}")
-    // fun save(@PathVariable chainType: ChainType,@RequestBody requests: List<NftData>): Flux<NftMetadataDto> {
-    //     return nftService.saveNfts(requests,chainType)
-    //
-    // }
-
     @GetMapping
     fun getAllByIds(@RequestParam nftIds: List<Long>): Flux<NftMetadataDto> {
         return nftService.findAllById(nftIds)
@@ -44,7 +38,6 @@ class NftController(
         return transferService.findOrUpdateByNftId(nftId)
             .collectList()
             .map { ResponseEntity.ok(it) }
-            .defaultIfEmpty( ResponseEntity.notFound().build())
             .onErrorResume { Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()) }
     }
 

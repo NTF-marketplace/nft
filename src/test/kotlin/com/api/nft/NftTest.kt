@@ -89,6 +89,20 @@ class NftTest(
         println(res?.price)
     }
 
+    @Test
+    fun transferTest() {
+        val nft = nftRepository.findById(3L).block()
 
+        transferService.createTransfer(nft!!).block()
+
+    }
+
+    @Test
+    fun trasfermoralist() {
+        val res =moralisApiService.getNftTransfer("0xa3784fe9104fdc0b988769fba7459ece2fb36eea","0",ChainType.POLYGON_MAINNET).block()
+        println(res.toString())
+
+
+    }
 
 }

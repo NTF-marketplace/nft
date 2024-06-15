@@ -62,6 +62,7 @@ class NftService(
                         ))
                         .then(Mono.just(nft))
                         .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft.toResponse())) }
+                        .doOnSuccess {  }
                         .flatMap {
                             transferService.createTransfer(nft).thenReturn(nft)
                         }

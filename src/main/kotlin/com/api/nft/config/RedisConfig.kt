@@ -17,15 +17,15 @@ class RedisConfig {
     @Bean
     fun redisClusterConfiguration(): RedisClusterConfiguration {
         val clusterNodes = listOf(
-            "172.24.0.2:6379",
-            "172.24.0.3:6379",
-            "172.24.0.4:6379",
-            "172.24.0.5:6379",
-            "172.24.0.6:6379",
-            "172.24.0.7:6379",
-            "172.24.0.8:6379",
-            "172.24.0.9:6379",
-            "172.24.0.10:6379"
+            "localhost:6379",
+            "localhost:6380",
+            "localhost:6381",
+            "localhost:6382",
+            "localhost:6383",
+            "localhost:6384",
+            "localhost:6385",
+            "localhost:6386",
+            "localhost:6387"
         )
         return RedisClusterConfiguration(clusterNodes)
     }
@@ -33,7 +33,7 @@ class RedisConfig {
     @Bean
     fun lettuceConnectionFactory(redisClusterConfiguration: RedisClusterConfiguration): LettuceConnectionFactory {
         val clientConfig = LettuceClientConfiguration.builder()
-            .commandTimeout(Duration.ofSeconds(10))  // 타임아웃 설정
+            .commandTimeout(Duration.ofSeconds(10))
             .build()
         return LettuceConnectionFactory(redisClusterConfiguration, clientConfig)
     }

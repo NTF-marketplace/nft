@@ -1,12 +1,11 @@
 package com.api.nft.controller
 
-import com.api.nft.domain.nft.repository.NftMetadataDto
+import com.api.nft.controller.dto.NftMetadataResponse
 import com.api.nft.domain.trasfer.Transfer
 import com.api.nft.enums.ChainType
 import com.api.nft.event.dto.NftResponse
 import com.api.nft.service.api.NftService
 import com.api.nft.service.api.TransferService
-import com.api.nft.service.external.dto.NftData
 import com.api.nft.service.external.dto.NftRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -29,7 +28,7 @@ class NftController(
 ) {
 
     @GetMapping
-    fun getAllByIds(@RequestParam nftIds: List<Long>): Flux<NftMetadataDto> {
+    fun getAllByIds(@RequestParam nftIds: List<Long>): Flux<NftMetadataResponse> {
         return nftService.findAllById(nftIds)
     }
 

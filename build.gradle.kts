@@ -23,7 +23,6 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-batch")
-    implementation("org.springframework.boot:spring-boot-starter-quartz")
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.postgresql:r2dbc-postgresql:1.0.4.RELEASE")
     implementation("org.postgresql:postgresql:42.7.3")

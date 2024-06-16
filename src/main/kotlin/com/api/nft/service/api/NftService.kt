@@ -1,16 +1,16 @@
 package com.api.nft.service.api
 
+import com.api.nft.controller.dto.NftMetadataResponse
 import com.api.nft.domain.nft.Nft
-import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
 import com.api.nft.enums.ContractType
 import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.event.dto.NftResponse
+import com.api.nft.service.RedisService
 import com.api.nft.service.external.dto.NftAttribute
 import com.api.nft.service.external.dto.NftData
 import com.api.nft.service.external.dto.NftMetadata
-import com.api.nft.service.external.infura.InfuraApiService
 import com.api.nft.service.external.moralis.MoralisApiService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -25,11 +25,11 @@ class NftService(
     private val attributeService: AttributeService,
     private val eventPublisher: ApplicationEventPublisher,
     private val transferService: TransferService,
-    private val moralisApiService: MoralisApiService
+    private val moralisApiService: MoralisApiService,
+    private val redisService: RedisService,
 ) {
 
-
-    fun findAllById(ids: List<Long>): Flux<NftMetadataDto> {
+    fun findAllById(ids: List<Long>): Flux<NftMetadataResponse> {
         return nftRepository.findAllByNftJoinMetadata(ids)
     }
 
@@ -62,7 +62,10 @@ class NftService(
                         ))
                         .then(Mono.just(nft))
                         .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft.toResponse())) }
-                        .doOnSuccess {  }
+                        .flatMap { createdNft ->
+                            redisService.saveNftToRedis(createdNft)
+                                .thenReturn(createdNft)
+                        }
                         .flatMap {
                             transferService.createTransfer(nft).thenReturn(nft)
                         }

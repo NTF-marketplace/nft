@@ -5,11 +5,14 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisClusterConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
+import org.springframework.data.redis.connection.RedisPassword;
+import io.lettuce.core.cluster.ClusterClientOptions
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
 import java.time.Duration
+
 
 @Configuration
 class RedisConfig {
@@ -17,15 +20,12 @@ class RedisConfig {
     @Bean
     fun redisClusterConfiguration(): RedisClusterConfiguration {
         val clusterNodes = listOf(
-            "10.10.148.169:6379",
-            // "10.10.148.169:6380",
-            // "10.10.148.169:6381",
-            // "10.10.148.169:6382",
-            // "10.10.148.169:6383",
-            // "10.10.148.169:6384",
-            // "10.10.148.169:6385",
-            // "10.10.148.169:6386",
-            // "10.10.148.169:6387"
+            "localhost:6379",
+            "localhost:6380",
+            "localhost:6381",
+            "localhost:6382",
+            "localhost:6383",
+            "localhost:6384"
         )
         return RedisClusterConfiguration(clusterNodes)
     }
@@ -34,7 +34,15 @@ class RedisConfig {
     fun lettuceConnectionFactory(redisClusterConfiguration: RedisClusterConfiguration): LettuceConnectionFactory {
         val clientConfig = LettuceClientConfiguration.builder()
             .commandTimeout(Duration.ofSeconds(10))
+            .clientOptions(
+                ClusterClientOptions.builder()
+                    .autoReconnect(true)
+                    .pingBeforeActivateConnection(true)
+                    .build()
+            )            
             .build()
+        redisClusterConfiguration.setPassword(RedisPassword.of("bitnami"))
+        redisClusterConfiguration.setMaxRedirects(3)
         return LettuceConnectionFactory(redisClusterConfiguration, clientConfig)
     }
 

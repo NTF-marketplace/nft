@@ -23,129 +23,111 @@ services:
     volumes:
       - ./rabbitmq_data:/var/lib/rabbitmq
 
-  redis-1:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+  redis-node-0:
+    image: docker.io/bitnami/redis-cluster:7.2
     ports:
-      - "6379:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.2
+      - 6379:6379
     volumes:
-      - redis1_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-  redis-2:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+      - redis-cluster_data-0:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
+
+  redis-node-1:
+    image: docker.io/bitnami/redis-cluster:7.2
     ports:
-      - "6380:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.3
+      - 6380:6380
     volumes:
-      - redis2_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - redis-cluster_data-1:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_PORT_NUMBER=6380'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6380'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
 
-  redis-3:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+  redis-node-2:
+    image: docker.io/bitnami/redis-cluster:7.2
     ports:
-      - "6381:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.4
+      - 6381:6381
     volumes:
-      - redis3_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - redis-cluster_data-2:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_PORT_NUMBER=6381'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6381'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
 
-  redis-4:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+  redis-node-3:
+    image: docker.io/bitnami/redis-cluster:7.2
     ports:
-      - "6382:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.5
+      - 6382:6382
     volumes:
-      - redis4_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - redis-cluster_data-3:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_PORT_NUMBER=6382'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6382'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
 
-  redis-5:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+  redis-node-4:
+    image: docker.io/bitnami/redis-cluster:7.2
     ports:
-      - "6383:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.6
+      - 6383:6383
     volumes:
-      - redis5_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - redis-cluster_data-4:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_PORT_NUMBER=6383'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6383'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
 
-  redis-6:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+  redis-node-5:
+    image: docker.io/bitnami/redis-cluster:7.2
     ports:
-      - "6384:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.7
+      - 6384:6384
     volumes:
-      - redis6_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-
-  redis-7:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
-    ports:
-      - "6385:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.8
-    volumes:
-      - redis7_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-
-  redis-8:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
-    ports:
-      - "6386:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.9
-    volumes:
-      - redis8_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-
-  redis-9:
-    image: redis:latest
-    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
-    ports:
-      - "6387:6379"
-    networks:
-      redis-cluster:
-        ipv4_address: 172.26.0.10
-    volumes:
-      - redis9_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-
-
-networks:
-  redis-cluster:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.26.0.0/16
-
+      - redis-cluster_data-5:/bitnami/redis/data
+    depends_on:
+      - redis-node-0
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+    environment:
+      - 'REDISCLI_AUTH=bitnami'
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_PORT_NUMBER=6384'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6384'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
+      - 'REDIS_CLUSTER_REPLICAS=1'
+      - 'REDIS_CLUSTER_CREATOR=yes'
 
 volumes:
-  redis1_data:
-  redis2_data:
-  redis3_data:
-  redis4_data:
-  redis5_data:
-  redis6_data:
-  redis7_data:
-  redis8_data:
-  redis9_data:
+  redis-cluster_data-0:
+    driver: local
+  redis-cluster_data-1:
+    driver: local
+  redis-cluster_data-2:
+    driver: local
+  redis-cluster_data-3:
+    driver: local
+  redis-cluster_data-4:
+    driver: local
+  redis-cluster_data-5:
+    driver: local
+    
+networks:
+  default:
+    name: local_network

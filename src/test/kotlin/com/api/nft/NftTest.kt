@@ -143,4 +143,9 @@ class NftTest(
         nftService.getByWalletNft("0x01b72b4aa3f66f213d62d53e829bc172a6a72867",ChainType.POLYGON_MAINNET).blockLast()
     }
 
+    @Test
+    fun test() {
+        redisService.saveData("heelo").block()
+    }
+
 }

@@ -30,7 +30,7 @@ services:
       - "6379:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.2
+        ipv4_address: 172.26.0.2
     volumes:
       - redis1_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -41,7 +41,7 @@ services:
       - "6380:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.3
+        ipv4_address: 172.26.0.3
     volumes:
       - redis2_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -53,7 +53,7 @@ services:
       - "6381:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.4
+        ipv4_address: 172.26.0.4
     volumes:
       - redis3_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -65,7 +65,7 @@ services:
       - "6382:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.5
+        ipv4_address: 172.26.0.5
     volumes:
       - redis4_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -77,7 +77,7 @@ services:
       - "6383:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.6
+        ipv4_address: 172.26.0.6
     volumes:
       - redis5_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -89,7 +89,7 @@ services:
       - "6384:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.7
+        ipv4_address: 172.26.0.7
     volumes:
       - redis6_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -101,7 +101,7 @@ services:
       - "6385:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.8
+        ipv4_address: 172.26.0.8
     volumes:
       - redis7_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -113,7 +113,7 @@ services:
       - "6386:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.9
+        ipv4_address: 172.26.0.9
     volumes:
       - redis8_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -125,7 +125,7 @@ services:
       - "6387:6379"
     networks:
       redis-cluster:
-        ipv4_address: 172.24.0.10
+        ipv4_address: 172.26.0.10
     volumes:
       - redis9_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -136,7 +136,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.24.0.0/16
+        - subnet: 172.26.0.0/16
 
 
 volumes:

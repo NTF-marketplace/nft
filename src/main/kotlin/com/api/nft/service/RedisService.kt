@@ -21,10 +21,13 @@ class RedisService(
         return nftRepository.findByNftJoinMetadata(nft.id!!)
             .doOnNext { data -> logger.info("Data retrieved: $data") }  // Log data to verify it is fetched
             .flatMap { data ->
-                println("asdasdasda")
                 reactiveRedisTemplate.opsForValue().set("NFT:${nft.id}", data).then()
             }
             .doOnError { error -> logger.error("Error occurred: ${error.message}", error) }  // Log any errors
+    }
+
+    fun saveData(key : String) : Mono<Void> {
+        return reactiveRedisTemplate.opsForValue().set("NFT:${key}","orange").then()
     }
     fun updateToRedis(nft: NftListing): Mono<Void> {
         return nftRepository.findByNftJoinMetadata(nft.nftId)

@@ -4,6 +4,7 @@ import com.api.nft.controller.dto.NftMetadataResponse
 import com.api.nft.domain.trasfer.Transfer
 import com.api.nft.enums.ChainType
 import com.api.nft.event.dto.NftResponse
+import com.api.nft.service.RedisService
 import com.api.nft.service.api.NftService
 import com.api.nft.service.api.TransferService
 import com.api.nft.service.external.dto.NftRequest
@@ -25,6 +26,7 @@ import reactor.core.publisher.Mono
 class NftController(
     private val nftService: NftService,
     private val transferService: TransferService,
+    private val redisService: RedisService,
 ) {
 
     @GetMapping
@@ -49,6 +51,11 @@ class NftController(
     fun getByWalletNft(@PathVariable chainType: ChainType, @RequestParam wallet: String) : Flux<NftResponse> {
         return nftService.getByWalletNft(wallet,chainType)
 
+    }
+
+    @GetMapping("/redis")
+    fun saveRedis() : Mono<Void>{
+        return redisService.saveData("sss")
     }
 
 

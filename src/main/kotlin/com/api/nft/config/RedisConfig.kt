@@ -17,15 +17,15 @@ class RedisConfig {
     @Bean
     fun redisClusterConfiguration(): RedisClusterConfiguration {
         val clusterNodes = listOf(
-            "localhost:6379",
-            "localhost:6380",
-            "localhost:6381",
-            "localhost:6382",
-            "localhost:6383",
-            "localhost:6384",
-            "localhost:6385",
-            "localhost:6386",
-            "localhost:6387"
+            "10.10.148.169:6379",
+            // "10.10.148.169:6380",
+            // "10.10.148.169:6381",
+            // "10.10.148.169:6382",
+            // "10.10.148.169:6383",
+            // "10.10.148.169:6384",
+            // "10.10.148.169:6385",
+            // "10.10.148.169:6386",
+            // "10.10.148.169:6387"
         )
         return RedisClusterConfiguration(clusterNodes)
     }

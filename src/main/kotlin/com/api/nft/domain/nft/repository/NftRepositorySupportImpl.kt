@@ -28,9 +28,9 @@ class NftRepositorySupportImpl(
                 nl.token_type AS tokenType
             FROM 
                 nft n
-            JOIN 
+            LEFT JOIN 
                 metadata m ON n.id = m.nft_id
-            JOIN nft_listing nl ON n.id = nl.nft_id    
+            LEFT JOIN nft_listing nl ON n.id = nl.nft_id    
             WHERE 
                 n.id = :$1
             """
@@ -46,7 +46,7 @@ class NftRepositorySupportImpl(
                     collectionName = row.get("collectionName", String::class.java)!!,
                     image = row.get("image", String::class.java) ?: "",
                     contractType = row.get("contractType", ContractType::class.java)!!,
-                    lastPrice = row.get("lastPrice", BigDecimal::class.java),
+                    lastPrice = row.get("lastPrice", BigDecimal::class.java)?.toDouble(),
                     tokenType = row.get("tokenType", TokenType::class.java)
                 )
             }.first()
@@ -84,7 +84,7 @@ class NftRepositorySupportImpl(
                     collectionName = row.get("collectionName", String::class.java)!!,
                     image = row.get("image", String::class.java) ?: "",
                     contractType = row.get("contractType", ContractType::class.java)!!,
-                    lastPrice = row.get("lastPrice", BigDecimal::class.java),
+                    lastPrice = row.get("lastPrice", BigDecimal::class.java)?.toDouble(),
                     tokenType = row.get("tokenType", TokenType::class.java),
                 )
             }

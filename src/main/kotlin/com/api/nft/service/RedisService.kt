@@ -1,8 +1,7 @@
 package com.api.nft.service
 
-import com.api.nft.domain.nft.Nft
-import com.api.nft.domain.nft.NftListing
 import com.api.nft.domain.nft.repository.NftRepository
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.ReactiveRedisTemplate
@@ -17,22 +16,11 @@ class RedisService(
 
     private val logger: Logger = LoggerFactory.getLogger(RedisService::class.java)
 
-    fun saveNftToRedis(nft: Nft): Mono<Void> {
-        return nftRepository.findByNftJoinMetadata(nft.id!!)
-            .doOnNext { data -> logger.info("Data retrieved: $data") }  // Log data to verify it is fetched
+    fun updateToRedis(nftId: Long): Mono<Void> {
+        return nftRepository.findByNftJoinMetadata(nftId)
             .flatMap { data ->
-                reactiveRedisTemplate.opsForValue().set("NFT:${nft.id}", data).then()
-            }
-            .doOnError { error -> logger.error("Error occurred: ${error.message}", error) }  // Log any errors
-    }
-
-    fun saveData(key : String) : Mono<Void> {
-        return reactiveRedisTemplate.opsForValue().set("NFT:${key}","orange").then()
-    }
-    fun updateToRedis(nft: NftListing): Mono<Void> {
-        return nftRepository.findByNftJoinMetadata(nft.nftId)
-            .flatMap { data ->
-                reactiveRedisTemplate.opsForValue().set("NFT:${nft.nftId}", data).then()
+                println("data: " + data.id)
+                reactiveRedisTemplate.opsForValue().set("NFT:${nftId}", data).then()
             }
     }
 }

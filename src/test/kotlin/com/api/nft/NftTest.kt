@@ -2,6 +2,7 @@ package com.api.nft
 
 import com.api.nft.domain.collection.repository.CollectionRepository
 import com.api.nft.domain.nft.Nft
+import com.api.nft.domain.nft.repository.NftListingRepository
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
 import com.api.nft.enums.ContractType
@@ -37,6 +38,7 @@ class NftTest(
     @Autowired private val binanceApiService: BinanceApiService,
     @Autowired private val redisService: RedisService,
     @Autowired private val nftListingService: NftListingService,
+    @Autowired private val nftListingRepository: NftListingRepository,
 ) {
 
 
@@ -132,20 +134,36 @@ class NftTest(
     }
 
     @Test
+    fun redisTest22( ){
+        // val nftlisting = nftListingRepository.findByNftId(1L).block()
+        redisService.updateToRedis(1L).block()
+    }
+
+    @Test
     fun redisTest() {
-        val nft = nftRepository.findById(1).block()
-        redisService.saveNftToRedis(nft!!).block()
+        val nft = nftRepository.findById(8).block()
+        redisService.updateToRedis(nft?.id!!).block()
+        // val res = nftRepository.findByNftJoinMetadata(1).block()
+
+
+    }
+
+    @Test
+    fun nftService() {
+        val nft = nftService.findOrCreateNft(tokenAddress = "0x524cAB2ec69124574082676e6F654a18df49A048", tokenId = "5430",ChainType.ETHEREUM_MAINNET).block()
 
     }
 
     @Test
     fun asdasd() {
         nftService.getByWalletNft("0x01b72b4aa3f66f213d62d53e829bc172a6a72867",ChainType.POLYGON_MAINNET).blockLast()
+        // Thread.sleep(10000)
+
     }
 
-    @Test
-    fun test() {
-        redisService.saveData("heelo").block()
-    }
+    // @Test
+    // fun test() {
+    //     redisService.saveData("heelo").block()
+    // }
 
 }

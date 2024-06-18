@@ -53,10 +53,5 @@ class NftController(
 
     }
 
-    @GetMapping("/redis")
-    fun saveRedis() : Mono<Void>{
-        return redisService.saveData("sss")
-    }
-
 
 }

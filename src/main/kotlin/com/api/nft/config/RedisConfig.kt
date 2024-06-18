@@ -25,7 +25,11 @@ class RedisConfig {
             "localhost:6381",
             "localhost:6382",
             "localhost:6383",
-            "localhost:6384"
+            "localhost:6384",
+            "localhost:6385",
+            "localhost:6386",
+            "localhost:6387",
+            "localhost:6388",
         )
         return RedisClusterConfiguration(clusterNodes)
     }
@@ -41,8 +45,8 @@ class RedisConfig {
                     .build()
             )            
             .build()
-        redisClusterConfiguration.setPassword(RedisPassword.of("bitnami"))
-        redisClusterConfiguration.setMaxRedirects(3)
+        redisClusterConfiguration.password = RedisPassword.of("bitnami")
+        redisClusterConfiguration.maxRedirects = 3
         return LettuceConnectionFactory(redisClusterConfiguration, clientConfig)
     }
 

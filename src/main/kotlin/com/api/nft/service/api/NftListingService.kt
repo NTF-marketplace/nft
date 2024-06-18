@@ -29,7 +29,7 @@ class NftListingService(
                 } else {
                     Mono.just(nftListing)
                 }.flatMap { updatedListing ->
-                    redisService.updateToRedis(updatedListing)
+                    redisService.updateToRedis(updatedListing.nftId)
                         .thenReturn(updatedListing)
                 }
             }.switchIfEmpty { save(newListing) }

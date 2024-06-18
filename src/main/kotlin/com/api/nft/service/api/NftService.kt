@@ -52,25 +52,31 @@ class NftService(
 
     fun createNftProcess(request: NftData, chainType: ChainType): Mono<Nft> {
         val response = getNftData(request, chainType)
-        return response.flatMap { (nftData, metadataData, attributeDataList) ->
-            createNft(nftData, metadataData, chainType)
-                .flatMap { nft ->
-                    metadataService.createMetadata(nft.id!!, metadataData)
-                        .thenMany(attributeService.createAttribute(
-                            nft.id,
-                            attributeDataList ?: emptyList()
-                        ))
-                        .then(Mono.just(nft))
-                        .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft.toResponse())) }
-                        .flatMap { createdNft ->
-                            redisService.saveNftToRedis(createdNft)
-                                .thenReturn(createdNft)
-                        }
-                        .flatMap {
-                            transferService.createTransfer(nft).thenReturn(nft)
-                        }
-                }
-        }
+        return response
+            .flatMap { (nftData, metadataData, attributeDataList) ->
+                createMetadata(nftData, metadataData, attributeDataList ,chainType) }
+            .flatMap { createdNft ->
+                redisService.updateToRedis(createdNft.id!!).thenReturn(createdNft) }
+            .flatMap { nft ->
+                transferService.createTransfer(nft).thenReturn(nft) }
+            .doOnSuccess {
+                eventPublisher.publishEvent(NftCreatedEvent(this, it.toResponse()))
+            }
+    }
+
+
+    private fun createMetadata(
+        nftData: NftData,
+        metadataData: NftMetadata,
+        attributeDataList: List<NftAttribute>?,
+        chainType: ChainType
+    ): Mono<Nft> {
+        return createNft(nftData, metadataData, chainType)
+            .flatMap { nft ->
+                metadataService.createMetadata(nft.id!!, metadataData)
+                    .thenMany(attributeService.createAttribute(nft.id, attributeDataList ?: emptyList()))
+                    .then(Mono.just(nft))
+            }
     }
 
     private fun Nft.toResponse() = NftResponse(

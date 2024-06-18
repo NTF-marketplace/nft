@@ -15,6 +15,6 @@ data class NftMetadataResponse(
     val nftName: String,
     val collectionName: String,
     val image: String,
-    val lastPrice: BigDecimal?,
+    val lastPrice: Double?,
     val tokenType: TokenType?,
 )

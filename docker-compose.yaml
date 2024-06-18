@@ -31,7 +31,7 @@ services:
       - redis-cluster_data-0:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
       - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
       - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
 
@@ -43,7 +43,7 @@ services:
       - redis-cluster_data-1:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
       - 'REDIS_PORT_NUMBER=6380'
       - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
       - 'REDIS_CLUSTER_ANNOUNCE_PORT=6380'
@@ -57,7 +57,7 @@ services:
       - redis-cluster_data-2:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
       - 'REDIS_PORT_NUMBER=6381'
       - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
       - 'REDIS_CLUSTER_ANNOUNCE_PORT=6381'
@@ -71,7 +71,7 @@ services:
       - redis-cluster_data-3:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
       - 'REDIS_PORT_NUMBER=6382'
       - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
       - 'REDIS_CLUSTER_ANNOUNCE_PORT=6382'
@@ -85,7 +85,7 @@ services:
       - redis-cluster_data-4:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
       - 'REDIS_PORT_NUMBER=6383'
       - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
       - 'REDIS_CLUSTER_ANNOUNCE_PORT=6383'
@@ -97,21 +97,81 @@ services:
       - 6384:6384
     volumes:
       - redis-cluster_data-5:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
+      - 'REDIS_PORT_NUMBER=6384'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6384'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
+
+  redis-node-6:
+    image: docker.io/bitnami/redis-cluster:7.2
+    ports:
+      - 6385:6385
+    volumes:
+      - redis-cluster_data-6:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
+      - 'REDIS_PORT_NUMBER=6385'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6385'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
+
+  redis-node-7:
+    image: docker.io/bitnami/redis-cluster:7.2
+    ports:
+      - 6386:6386
+    volumes:
+      - redis-cluster_data-7:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
+      - 'REDIS_PORT_NUMBER=6386'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6386'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
+
+  redis-node-8:
+    image: docker.io/bitnami/redis-cluster:7.2
+    ports:
+      - 6387:6387
+    volumes:
+      - redis-cluster_data-8:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
+      - 'REDIS_PORT_NUMBER=6387'
+      - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6387'
+      - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
+
+  redis-node-9:
+    image: docker.io/bitnami/redis-cluster:7.2
+    ports:
+      - 6388:6388
+    volumes:
+      - redis-cluster_data-9:/bitnami/redis/data
     depends_on:
       - redis-node-0
       - redis-node-1
       - redis-node-2
       - redis-node-3
       - redis-node-4
+      - redis-node-5
+      - redis-node-6
+      - redis-node-7
+      - redis-node-8
     environment:
       - 'REDISCLI_AUTH=bitnami'
       - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384'
-      - 'REDIS_PORT_NUMBER=6384'
+      - 'REDIS_NODES=redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384 redis-node-6:6385 redis-node-7:6386 redis-node-8:6387 redis-node-9:6388'
+      - 'REDIS_PORT_NUMBER=6388'
       - 'REDIS_CLUSTER_ANNOUNCE_HOSTNAME=localhost'
-      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6384'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=6388'
       - 'REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname'
-      - 'REDIS_CLUSTER_REPLICAS=1'
+      - 'REDIS_CLUSTER_REPLICAS=2'
       - 'REDIS_CLUSTER_CREATOR=yes'
 
 volumes:
@@ -126,6 +186,14 @@ volumes:
   redis-cluster_data-4:
     driver: local
   redis-cluster_data-5:
+    driver: local
+  redis-cluster_data-6:
+    driver: local
+  redis-cluster_data-7:
+    driver: local
+  redis-cluster_data-8:
+    driver: local
+  redis-cluster_data-9:
     driver: local
     
 networks:

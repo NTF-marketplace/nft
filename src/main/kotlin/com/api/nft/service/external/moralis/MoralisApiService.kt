@@ -16,7 +16,7 @@ class MoralisApiService {
         .baseUrl(baseUrl)
         .build()
 
-    private fun queryParamByChain(chain: ChainType): String? {
+    private fun queryParamByChain(chain: ChainType): String {
         val chain = when (chain) {
             ChainType.ETHEREUM_MAINNET -> "0x1"
             ChainType.POLYGON_MAINNET -> "0x89"

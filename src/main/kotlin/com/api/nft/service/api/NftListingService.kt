@@ -2,6 +2,8 @@ package com.api.nft.service.api
 
 import com.api.nft.domain.nft.NftListing
 import com.api.nft.domain.nft.repository.NftListingRepository
+import com.api.nft.domain.nft.repository.NftRepository
+import com.api.nft.service.RedisService
 import com.api.nft.service.dto.ListingResponse
 import com.api.nft.storage.PriceStorage
 import org.springframework.stereotype.Service
@@ -13,6 +15,7 @@ import java.math.BigDecimal
 class NftListingService(
     private val nftListingRepository: NftListingRepository,
     private val priceStorage: PriceStorage,
+    private val redisService: RedisService,
 ) {
 
     fun update(newListing: ListingResponse): Mono<NftListing> {
@@ -25,6 +28,9 @@ class NftListingService(
                         .thenReturn(nftListing.update(newListing.price, newListing.tokenType))
                 } else {
                     Mono.just(nftListing)
+                }.flatMap { updatedListing ->
+                    redisService.updateToRedis(updatedListing.nftId)
+                        .thenReturn(updatedListing)
                 }
             }.switchIfEmpty { save(newListing) }
     }

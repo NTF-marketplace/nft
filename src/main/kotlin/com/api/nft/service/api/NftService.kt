@@ -1,16 +1,16 @@
 package com.api.nft.service.api
 
+import com.api.nft.controller.dto.NftMetadataResponse
 import com.api.nft.domain.nft.Nft
-import com.api.nft.domain.nft.repository.NftMetadataDto
 import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.enums.ChainType
 import com.api.nft.enums.ContractType
 import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.event.dto.NftResponse
+import com.api.nft.service.RedisService
 import com.api.nft.service.external.dto.NftAttribute
 import com.api.nft.service.external.dto.NftData
 import com.api.nft.service.external.dto.NftMetadata
-import com.api.nft.service.external.infura.InfuraApiService
 import com.api.nft.service.external.moralis.MoralisApiService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -25,13 +25,24 @@ class NftService(
     private val attributeService: AttributeService,
     private val eventPublisher: ApplicationEventPublisher,
     private val transferService: TransferService,
-    private val moralisApiService: MoralisApiService
+    private val moralisApiService: MoralisApiService,
+    private val redisService: RedisService,
 ) {
 
-
-    fun findAllById(ids: List<Long>): Flux<NftMetadataDto> {
+    fun findAllById(ids: List<Long>): Flux<NftMetadataResponse> {
         return nftRepository.findAllByNftJoinMetadata(ids)
+            .doOnNext { nft ->
+                redisService.updateToRedis(nft.id!!).subscribe()
+            }
     }
+
+    fun findById(id: Long): Mono<NftMetadataResponse> {
+        return nftRepository.findByNftJoinMetadata(id)
+            .doOnNext { nft ->
+                redisService.updateToRedis(nft.id!!).subscribe()
+            }
+    }
+
 
     fun findOrCreateNft(tokenAddress: String,tokenId: String, chainType: ChainType): Mono<NftResponse> {
         return nftRepository.findByTokenAddressAndTokenIdAndChainType(tokenAddress,tokenId,chainType)
@@ -39,7 +50,6 @@ class NftService(
                 moralisApiService.getNFTMetadata(tokenAddress,tokenId,chainType)
                     .flatMap { createNftProcess(it,chainType) }
             ).map { it.toResponse() }
-
     }
 
     fun getByWalletNft(wallet: String,chainType: ChainType): Flux<NftResponse> {
@@ -52,21 +62,31 @@ class NftService(
 
     fun createNftProcess(request: NftData, chainType: ChainType): Mono<Nft> {
         val response = getNftData(request, chainType)
-        return response.flatMap { (nftData, metadataData, attributeDataList) ->
-            createNft(nftData, metadataData, chainType)
-                .flatMap { nft ->
-                    metadataService.createMetadata(nft.id!!, metadataData)
-                        .thenMany(attributeService.createAttribute(
-                            nft.id,
-                            attributeDataList ?: emptyList()
-                        ))
-                        .then(Mono.just(nft))
-                        .doOnSuccess { eventPublisher.publishEvent(NftCreatedEvent(this, nft.toResponse())) }
-                        .flatMap {
-                            transferService.createTransfer(nft).thenReturn(nft)
-                        }
-                }
-        }
+        return response
+            .flatMap { (nftData, metadataData, attributeDataList) ->
+                createMetadata(nftData, metadataData, attributeDataList ,chainType) }
+            .flatMap { createdNft ->
+                redisService.updateToRedis(createdNft.id!!).thenReturn(createdNft) }
+            // .flatMap { nft ->
+            //     transferService.createTransfer(nft).thenReturn(nft) }
+            .doOnSuccess {
+                eventPublisher.publishEvent(NftCreatedEvent(this, it.toResponse()))
+            }
+    }
+
+
+    private fun createMetadata(
+        nftData: NftData,
+        metadataData: NftMetadata,
+        attributeDataList: List<NftAttribute>?,
+        chainType: ChainType
+    ): Mono<Nft> {
+        return createNft(nftData, metadataData, chainType)
+            .flatMap { nft ->
+                metadataService.createMetadata(nft.id!!, metadataData)
+                    .thenMany(attributeService.createAttribute(nft.id, attributeDataList ?: emptyList()))
+                    .then(Mono.just(nft))
+            }
     }
 
     private fun Nft.toResponse() = NftResponse(

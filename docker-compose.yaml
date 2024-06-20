@@ -195,7 +195,3 @@ volumes:
     driver: local
   redis-cluster_data-9:
     driver: local
-    
-networks:
-  default:
-    name: local_network

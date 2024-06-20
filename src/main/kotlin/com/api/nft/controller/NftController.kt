@@ -26,12 +26,16 @@ import reactor.core.publisher.Mono
 class NftController(
     private val nftService: NftService,
     private val transferService: TransferService,
-    private val redisService: RedisService,
 ) {
 
     @GetMapping
     fun getAllByIds(@RequestParam nftIds: List<Long>): Flux<NftMetadataResponse> {
         return nftService.findAllById(nftIds)
+    }
+
+    @GetMapping("/{nftId}")
+    fun getOneById(@PathVariable nftId: Long): Mono<NftMetadataResponse> {
+        return nftService.findById(nftId)
     }
 
     @GetMapping("/transfer")

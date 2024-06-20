@@ -31,7 +31,18 @@ class NftService(
 
     fun findAllById(ids: List<Long>): Flux<NftMetadataResponse> {
         return nftRepository.findAllByNftJoinMetadata(ids)
+            .doOnNext { nft ->
+                redisService.updateToRedis(nft.id!!).subscribe()
+            }
     }
+
+    fun findById(id: Long): Mono<NftMetadataResponse> {
+        return nftRepository.findByNftJoinMetadata(id)
+            .doOnNext { nft ->
+                redisService.updateToRedis(nft.id!!).subscribe()
+            }
+    }
+
 
     fun findOrCreateNft(tokenAddress: String,tokenId: String, chainType: ChainType): Mono<NftResponse> {
         return nftRepository.findByTokenAddressAndTokenIdAndChainType(tokenAddress,tokenId,chainType)
@@ -39,7 +50,6 @@ class NftService(
                 moralisApiService.getNFTMetadata(tokenAddress,tokenId,chainType)
                     .flatMap { createNftProcess(it,chainType) }
             ).map { it.toResponse() }
-
     }
 
     fun getByWalletNft(wallet: String,chainType: ChainType): Flux<NftResponse> {
@@ -57,8 +67,8 @@ class NftService(
                 createMetadata(nftData, metadataData, attributeDataList ,chainType) }
             .flatMap { createdNft ->
                 redisService.updateToRedis(createdNft.id!!).thenReturn(createdNft) }
-            .flatMap { nft ->
-                transferService.createTransfer(nft).thenReturn(nft) }
+            // .flatMap { nft ->
+            //     transferService.createTransfer(nft).thenReturn(nft) }
             .doOnSuccess {
                 eventPublisher.publishEvent(NftCreatedEvent(this, it.toResponse()))
             }

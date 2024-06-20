@@ -161,9 +161,12 @@ class NftTest(
 
     }
 
-    // @Test
-    // fun test() {
-    //     redisService.saveData("heelo").block()
-    // }
+    @Test
+    fun test() {
+        val address = "0x01b72b4aa3f66f213d62d53e829bc172a6a72867"
+
+        val res= moralisApiService.getNFTsByAddress(address,ChainType.POLYGON_MAINNET).block()
+        println(res.toString())
+    }
 
 }

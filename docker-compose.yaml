@@ -3,25 +3,27 @@ version: "3.8"
 services:
   db:
     image: postgres:latest
-    environment:
-      POSTGRES_USER: nft
-      POSTGRES_PASSWORD: nft
-      POSTGRES_DB: nft
     ports:
       - '5434:5432'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ${HOME}/Google Drive/내 드라이브/marketplace/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: nft
+      POSTGRES_PASSWORD: nft
+      POSTGRES_DB: nft
+      PGDATA: /var/lib/postgresql/data/pgdata      
 
   rabbitmq:
     image: rabbitmq:3-management
-    environment:
-      RABBITMQ_DEFAULT_USER: closeSea
-      RABBITMQ_DEFAULT_PASS: closeSeaP@ssword
     ports:
       - '5672:5672'
       - '15672:15672'
     volumes:
-      - ./rabbitmq_data:/var/lib/rabbitmq
+      - ${HOME}/Google Drive/내 드라이브/marketplace/rabbitmq:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: closeSea
+      RABBITMQ_DEFAULT_PASS: closeSeaP@ssword
 
   redis-node-0:
     image: docker.io/bitnami/redis-cluster:7.2

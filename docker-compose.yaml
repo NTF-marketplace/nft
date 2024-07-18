@@ -7,7 +7,7 @@ services:
       - '5434:5432'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ${HOME}/Library/CloudStorage/GoogleDrive-dongkim.chatgpt@gmail.com/내 드라이브/marketplace/db:/var/lib/postgresql/data
+      - ${HOME}/Library/CloudStorage/GoogleDrive-dongkim.chatgpt@gmail.com/내 드라이브/marketplace/db/nft:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: nft
       POSTGRES_PASSWORD: nft
@@ -20,7 +20,7 @@ services:
       - '5672:5672'
       - '15672:15672'
     volumes:
-      - ${HOME}/Library/CloudStorage/GoogleDrive-dongkim.chatgpt@gmail.com/내 드라이브/marketplace/rabbitmq:/var/lib/rabbitmq
+      - ./rabbitmq_data:/var/lib/rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: closeSea
       RABBITMQ_DEFAULT_PASS: closeSeaP@ssword

@@ -20,19 +20,20 @@ class NftListingService(
 
     fun update(newListing: ListingResponse): Mono<NftListing> {
         return nftListingRepository.findByNftId(newListing.nftId)
-            .flatMap { nftListing ->
-                val currentPrice = priceStorage.get(nftListing.tokenType)?.multiply(nftListing.price) ?: BigDecimal.ZERO
-                val newPrice = priceStorage.get(newListing.tokenType)?.multiply(newListing.price) ?: BigDecimal.ZERO
-                if (currentPrice < newPrice) {
-                    nftListingRepository.updateListing(nftListing.nftId, price = newListing.price,newListing.tokenType)
-                        .thenReturn(nftListing.update(newListing.price, newListing.tokenType))
-                } else {
-                    Mono.just(nftListing)
-                }.flatMap { updatedListing ->
+            // .flatMap { nftListing ->
+            //     val currentPrice = priceStorage.get(nftListing.tokenType)?.multiply(nftListing.price) ?: BigDecimal.ZERO
+            //     val newPrice = priceStorage.get(newListing.tokenType)?.multiply(newListing.price) ?: BigDecimal.ZERO
+            //     if (currentPrice < newPrice) {
+            //         nftListingRepository.updateListing(nftListing.nftId, price = newListing.price,newListing.tokenType)
+            //             .thenReturn(nftListing.update(newListing.price, newListing.tokenType))
+            //     } else {
+            //         Mono.just(nftListing)
+            //     }
+                    .flatMap { updatedListing ->
                     redisService.updateToRedis(updatedListing.nftId)
                         .thenReturn(updatedListing)
                 }
-            }.switchIfEmpty { save(newListing) }
+            .switchIfEmpty { save(newListing) }
     }
 
     fun save(listing: ListingResponse) : Mono<NftListing> {

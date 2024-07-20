@@ -16,4 +16,6 @@ interface NftListingRepository : R2dbcRepository<NftListing,Long> {
 
     fun deleteAllByNftIdIn(nftId: List<Long>): Mono<Void>
 
+    fun deleteByNftId(nftId: Long): Mono<Void>
+
 }

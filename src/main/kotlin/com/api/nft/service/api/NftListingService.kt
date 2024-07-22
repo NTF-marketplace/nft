@@ -14,29 +14,25 @@ import java.math.BigDecimal
 @Service
 class NftListingService(
     private val nftListingRepository: NftListingRepository,
-    private val priceStorage: PriceStorage,
     private val redisService: RedisService,
 ) {
 
-    fun update(newListing: ListingResponse): Mono<NftListing> {
-        return nftListingRepository.findByNftId(newListing.nftId)
-            // .flatMap { nftListing ->
-            //     val currentPrice = priceStorage.get(nftListing.tokenType)?.multiply(nftListing.price) ?: BigDecimal.ZERO
-            //     val newPrice = priceStorage.get(newListing.tokenType)?.multiply(newListing.price) ?: BigDecimal.ZERO
-            //     if (currentPrice < newPrice) {
-            //         nftListingRepository.updateListing(nftListing.nftId, price = newListing.price,newListing.tokenType)
-            //             .thenReturn(nftListing.update(newListing.price, newListing.tokenType))
-            //     } else {
-            //         Mono.just(nftListing)
-            //     }
-                    .flatMap { updatedListing ->
-                    redisService.updateToRedis(updatedListing.nftId)
-                        .thenReturn(updatedListing)
+    fun update(newListing: ListingResponse): Mono<Void> {
+        return if (newListing.active) {
+            println("why not save ? : " + newListing.active )
+            save(newListing)
+                .then(redisService.updateToRedis(newListing.nftId))
+        } else {
+            nftListingRepository.findByNftId(newListing.nftId)
+                .flatMap { nftListing ->
+                    nftListingRepository.deleteByNftId(nftListing.nftId)
                 }
-            .switchIfEmpty { save(newListing) }
+                .then(redisService.updateToRedis(newListing.nftId))
+        }
     }
 
     fun save(listing: ListingResponse) : Mono<NftListing> {
+        println("do you save logic ?")
         return nftListingRepository.save(
             NftListing(
                 nftId =  listing.nftId,
@@ -46,7 +42,4 @@ class NftListingService(
         )
     }
 
-    fun batchDelete(nftIds: List<Long>): Mono<Void> {
-        return nftListingRepository.deleteAllByNftIdIn(nftIds)
-    }
 }

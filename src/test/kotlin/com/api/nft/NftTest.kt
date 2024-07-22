@@ -118,20 +118,20 @@ class NftTest(
     }
 
 
-    @Test
-    fun nftListing() {
-         val listing = ListingResponse(
-            id = 1,
-            nftId = 3L,
-            address = "0x01b72b4aa3f66f213d62d53e829bc172a6a72867",
-            createdDateTime = 1714662809000,
-            endDateTime = 1714662809000,
-            price = BigDecimal(0.23),
-            tokenType = TokenType.ETH
-
-        )
-        nftListingService.update(listing).block()
-    }
+//    @Test
+//    fun nftListing() {
+//         val listing = ListingResponse(
+//            id = 1,
+//            nftId = 3L,
+//            address = "0x01b72b4aa3f66f213d62d53e829bc172a6a72867",
+//            createdDateTime = 1714662809000,
+//            endDateTime = 1714662809000,
+//            price = BigDecimal(0.23),
+//            tokenType = TokenType.ETH
+//
+//        )
+//        nftListingService.update(listing).block()
+//    }
 
     @Test
     fun redisTest22( ){

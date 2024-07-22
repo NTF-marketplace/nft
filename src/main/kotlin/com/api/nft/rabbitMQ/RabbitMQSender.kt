@@ -10,6 +10,6 @@ class RabbitMQSender(
 ) {
 
     fun nftSend(nft: NftResponse) {
-        rabbitTemplate.convertAndSend("nftExchange", "nftRoutingKey", nft)
+        rabbitTemplate.convertAndSend("nftExchange", "", nft)
     }
 }

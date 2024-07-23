@@ -1,6 +1,7 @@
 package com.api.nft.service.external.infura
 
 import com.api.nft.enums.ChainType
+import com.api.nft.properties.ApiKeysProperties
 import com.api.nft.service.external.dto.EthLogRequest
 import com.api.nft.service.external.dto.EthLogResponse
 import com.api.nft.service.external.dto.InfuraRequest
@@ -20,7 +21,9 @@ import java.time.Instant
 
 
 @Service
-class InfuraApiService {
+class InfuraApiService(
+    private val apiKeysProperties: ApiKeysProperties
+) {
 
     private fun urlByChain(chainType: ChainType) : WebClient {
         val baseUrl = when (chainType) {
@@ -69,7 +72,7 @@ class InfuraApiService {
             val webClient = urlByChain(chainType)
 
             return webClient.post()
-                .uri("/v3/$apiKey")
+                .uri("/v3/${apiKeysProperties.infura}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBody)
                 .retrieve()
@@ -86,7 +89,7 @@ class InfuraApiService {
         )
 
         return webClient.post()
-            .uri("/v3/$apiKey")
+            .uri("/v3/${apiKeysProperties.infura}")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(requestBody)
             .retrieve()
@@ -96,9 +99,5 @@ class InfuraApiService {
                 val timestamp = result["timestamp"].toString()
                 Instant.ofEpochSecond(Numeric.decodeQuantity(timestamp).longValueExact()).toEpochMilli()
             }
-    }
-
-    companion object{
-        private val apiKey = "98b672d2ce9a4089a3a5cb5081dde2fa"
     }
 }

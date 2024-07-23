@@ -2,14 +2,10 @@ package com.api.nft.service.api
 
 import com.api.nft.domain.nft.NftListing
 import com.api.nft.domain.nft.repository.NftListingRepository
-import com.api.nft.domain.nft.repository.NftRepository
 import com.api.nft.service.RedisService
 import com.api.nft.service.dto.ListingResponse
-import com.api.nft.storage.PriceStorage
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.switchIfEmpty
-import java.math.BigDecimal
 
 @Service
 class NftListingService(

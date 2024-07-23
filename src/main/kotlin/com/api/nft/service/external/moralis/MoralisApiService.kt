@@ -1,6 +1,7 @@
 package com.api.nft.service.external.moralis
 
 import com.api.nft.enums.ChainType
+import com.api.nft.properties.ApiKeysProperties
 import com.api.nft.service.external.dto.NFTByWalletResponse
 import com.api.nft.service.external.dto.NftData
 import com.api.nft.service.external.dto.NftTransferData
@@ -10,7 +11,9 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 
 @Service
-class MoralisApiService {
+class MoralisApiService(
+    private val apiKeysProperties: ApiKeysProperties,
+) {
 
     private val webClient = WebClient.builder()
         .baseUrl(baseUrl)
@@ -41,7 +44,7 @@ class MoralisApiService {
                 it.queryParam("chain", chain)
                 it.build()
             }
-            .header("X-API-Key", apiKey)
+            .header("X-API-Key", apiKeysProperties.moralis)
             .header("Accept", MediaType.APPLICATION_JSON_VALUE)
             .retrieve()
             .bodyToMono(NftTransferData::class.java)
@@ -56,7 +59,7 @@ class MoralisApiService {
                 it.queryParam("exclude_spam", true)
                 it.build()
             }
-            .header("X-API-Key", apiKey)
+            .header("X-API-Key", apiKeysProperties.moralis)
             .header("Accept", MediaType.APPLICATION_JSON_VALUE)
             .retrieve()
             .bodyToMono(NFTByWalletResponse::class.java)
@@ -70,7 +73,7 @@ class MoralisApiService {
                 it.queryParam("chain", chain)
                 it.build()
             }
-            .header("X-API-Key", apiKey)
+            .header("X-API-Key", apiKeysProperties.moralis)
             .header("Accept", MediaType.APPLICATION_JSON_VALUE)
             .retrieve()
             .bodyToMono(NftData::class.java)
@@ -79,7 +82,6 @@ class MoralisApiService {
 
 
     companion object {
-        private val apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImJiNmIxMWJmLWNmNzItNDg0OC04OGEyLTBjYTIwODRjN2VhMyIsIm9yZ0lkIjoiMzgzODQwIiwidXNlcklkIjoiMzk0NDAyIiwidHlwZUlkIjoiMGZlYWQ5NDctZjQwZS00MDkwLWFlNGUtOTA1ZTdmMjUxZTAzIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTA5NTIwMjYsImV4cCI6NDg2NjcxMjAyNn0.VQE60IPGiWxdp7jKLF0jzXnxrLjEpU56H4bnfhMt0Sw"
         private val baseUrl = "https://deep-index.moralis.io/api"
     }
 }

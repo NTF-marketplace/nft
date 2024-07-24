@@ -1,5 +1,6 @@
 package com.api.nft.domain.nft
 
+import com.api.nft.enums.StatusType
 import com.api.nft.enums.TokenType
 import org.springframework.data.relational.core.mapping.Table
 import java.math.BigDecimal
@@ -10,8 +11,11 @@ data class NftListing(
     val price: BigDecimal,
     val tokenType: TokenType,
     val nftId: Long,
+    val statusType: StatusType,
+    val createdDate: Long,
+    val endDate: Long,
 ){
-    fun update(newPrice: BigDecimal,new_tokenType: TokenType): NftListing {
-        return this.copy(price = newPrice, tokenType = new_tokenType)
+    fun updateStatus(statusType: StatusType): NftListing {
+        return this.copy(statusType = statusType)
     }
 }

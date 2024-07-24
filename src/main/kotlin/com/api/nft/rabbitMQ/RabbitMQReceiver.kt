@@ -20,15 +20,14 @@ class RabbitMQReceiver(
     exchange = Exchange(value = "listingExchange", type = ExchangeTypes.FANOUT)
     )])
     fun listingMessage(listing: ListingResponse){
-        println("active : " + listing.active)
         nftListingService.update(listing).subscribe()
     }
 
-    @RabbitListener(bindings = [QueueBinding(
-        value = Queue(name = "", durable = "false", exclusive = "true", autoDelete = "true"),
-        exchange = Exchange(value = "listingCancelExchange", type = ExchangeTypes.FANOUT)
-    )])
-    fun listingCancelMessage(listing: ListingResponse){
-        nftListingService.update(listing).subscribe()
-    }
+    // @RabbitListener(bindings = [QueueBinding(
+    //     value = Queue(name = "", durable = "false", exclusive = "true", autoDelete = "true"),
+    //     exchange = Exchange(value = "listingCancelExchange", type = ExchangeTypes.FANOUT)
+    // )])
+    // fun listingCancelMessage(listing: ListingResponse){
+    //     nftListingService.update(listing).subscribe()
+    // }
 }

@@ -21,6 +21,12 @@ CREATE TYPE token_type AS ENUM (
     );
 
 
+CREATE TYPE status_type AS ENUM (
+    'RESERVATION',
+    'LISTING'
+    );
+
+
 
 CREATE TABLE IF NOT EXISTS collection (
     name varchar(500) PRIMARY KEY,
@@ -72,7 +78,10 @@ CREATE TABLE IF NOT EXISTS nft_listing (
     id SERIAL PRIMARY KEY,
     nft_id BIGINT REFERENCES nft(id),
     price DECIMAL(19, 4) NOT NULL,
-    token_type token_type
+    token_type token_type,
+    status_type status_type not null,
+    created_date BIGINT,
+    end_date BIGINT
 );
 
 

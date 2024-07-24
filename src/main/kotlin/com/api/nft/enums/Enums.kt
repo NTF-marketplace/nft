@@ -24,3 +24,5 @@ enum class ContractType{
 enum class TokenType {
         SAND, MATIC, ETH, BTC
 }
+
+enum class StatusType { RESERVATION, LISTING, RESERVATION_CANCEL, CANCEL, EXPIRED }

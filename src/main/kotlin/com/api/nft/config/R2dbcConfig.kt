@@ -2,9 +2,11 @@ package com.api.nft.config
 
 import com.api.nft.enums.ChainType
 import com.api.nft.enums.ContractType
+import com.api.nft.enums.StatusType
 import com.api.nft.enums.TokenType
 import com.api.nft.util.ChainTypeConvert
 import com.api.nft.util.ContractTypeConverter
+import com.api.nft.util.StatusTypeConvert
 import com.api.nft.util.StringToEnumConverter
 import com.api.nft.util.TokenTypeConvert
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration
@@ -40,6 +42,7 @@ class R2dbcConfig : AbstractR2dbcConfiguration() {
                     .withEnum("contract_type", ContractType::class.java)
                     .withEnum("chain_type", ChainType::class.java)
                     .withEnum("token_type", TokenType::class.java)
+                    .withEnum("status_type", StatusType::class.java)
                     .build()
             )
             .build()
@@ -55,6 +58,8 @@ class R2dbcConfig : AbstractR2dbcConfiguration() {
         converters.add(StringToEnumConverter(ChainType::class.java))
         converters.add(TokenTypeConvert(TokenType::class.java))
         converters.add(StringToEnumConverter(TokenType::class.java))
+        converters.add(StatusTypeConvert(StatusType::class.java))
+        converters.add(StringToEnumConverter(StatusType::class.java))
         return R2dbcCustomConversions(storeConversions, converters)
     }
 

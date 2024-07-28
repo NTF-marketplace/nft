@@ -35,6 +35,6 @@ class RabbitConfig {
     fun listingExchange() = createFanoutExchange("listingExchange")
 
 
-    // @Bean
-    // fun listingCancelExchange() = createFanoutExchange("listingCancelExchange")
+     @Bean
+     fun auctionExchange() = createFanoutExchange("auctionExchange")
 }

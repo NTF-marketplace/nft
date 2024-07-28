@@ -20,13 +20,11 @@ class NftListingService(
                 save(newListing)
                     .then(redisService.updateToRedis(newListing.nftId))
             }
-            StatusType.LISTING -> {
-                println("update type LISTING")
+            StatusType.ACTIVED -> {
                 nftListingRepository.findByNftId(newListing.nftId)
                     .flatMap { nftListing ->
-                        println("id : " + newListing.nftId)
                         println("statusType : " + newListing.statusType)
-                        nftListingRepository.updateListing(nftId = nftListing.nftId, statusType = newListing.statusType)
+                        nftListingRepository.updateListing(nftId = nftListing.nftId, statusType = StatusType.LISTING)
                     }
                     .then(redisService.updateToRedis(newListing.nftId))
             }
@@ -37,6 +35,7 @@ class NftListingService(
                     }
                     .then(redisService.updateToRedis(newListing.nftId))
             }
+            else -> Mono.empty()
         }
     }
     fun save(listing: ListingResponse) : Mono<NftListing> {

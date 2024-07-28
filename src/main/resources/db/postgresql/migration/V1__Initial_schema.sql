@@ -23,7 +23,8 @@ CREATE TYPE token_type AS ENUM (
 
 CREATE TYPE status_type AS ENUM (
     'RESERVATION',
-    'LISTING'
+    'LISTING',
+    'AUCTION'
     );
 
 
@@ -78,6 +79,17 @@ CREATE TABLE IF NOT EXISTS nft_listing (
     id SERIAL PRIMARY KEY,
     nft_id BIGINT REFERENCES nft(id),
     price DECIMAL(19, 4) NOT NULL,
+    token_type token_type,
+    status_type status_type not null,
+    created_date BIGINT,
+    end_date BIGINT
+);
+
+
+CREATE TABLE IF NOT EXISTS nft_auction (
+    id SERIAL PRIMARY KEY,
+    nft_id BIGINT REFERENCES nft(id),
+    starting_price DECIMAL(19, 4) NOT NULL,
     token_type token_type,
     status_type status_type not null,
     created_date BIGINT,

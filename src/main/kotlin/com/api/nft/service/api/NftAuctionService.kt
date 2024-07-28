@@ -36,6 +36,7 @@ class NftAuctionService(
     fun save(auction: AuctionResponse) : Mono<Void> {
         return nftAuctionRepository.save(
             NftAuction(
+                id = auction.id,
                 nftId =  auction.nftId,
                 startingPrice = auction.startingPrice,
                 tokenType = auction.tokenType,

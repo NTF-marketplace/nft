@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS transfer (
 );
 
 CREATE TABLE IF NOT EXISTS nft_listing (
-    id SERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
     nft_id BIGINT REFERENCES nft(id),
     price DECIMAL(19, 4) NOT NULL,
     token_type token_type,
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS nft_listing (
 
 
 CREATE TABLE IF NOT EXISTS nft_auction (
-    id SERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
     nft_id BIGINT REFERENCES nft(id),
     starting_price DECIMAL(19, 4) NOT NULL,
     token_type token_type,

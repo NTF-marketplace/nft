@@ -31,15 +31,17 @@ class NftService(
 
     fun findAllById(ids: List<Long>): Flux<NftMetadataResponse> {
         return nftRepository.findAllByNftJoinMetadata(ids)
-            .doOnNext { nft ->
-                redisService.updateToRedis(nft.id!!).subscribe()
+            .flatMap { nft ->
+                redisService.updateToRedis(nft.id)
+                    .thenReturn(nft)
             }
     }
 
     fun findById(id: Long): Mono<NftMetadataResponse> {
         return nftRepository.findByNftJoinMetadata(id)
-            .doOnNext { nft ->
-                redisService.updateToRedis(nft.id!!).subscribe()
+            .flatMap { nft ->
+                redisService.updateToRedis(nft.id)
+                    .thenReturn(nft)
             }
     }
 

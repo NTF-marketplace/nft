@@ -41,6 +41,7 @@ class NftListingService(
     fun save(listing: ListingResponse) : Mono<NftListing> {
         return nftListingRepository.save(
             NftListing(
+                id = listing.id,
                 nftId =  listing.nftId,
                 price = listing.price,
                 tokenType = listing.tokenType,

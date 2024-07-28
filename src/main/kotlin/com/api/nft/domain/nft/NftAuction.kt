@@ -7,7 +7,7 @@ import java.math.BigDecimal
 
 @Table("nft_auction")
 data class NftAuction(
-    val id: Long? = null,
+    val id: Long,
     val startingPrice: BigDecimal,
     val tokenType: TokenType,
     val nftId: Long,

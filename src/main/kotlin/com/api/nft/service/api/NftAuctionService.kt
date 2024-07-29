@@ -39,7 +39,7 @@ class NftAuctionService(
                 id = auction.id,
                 nftId =  auction.nftId,
                 startingPrice = auction.startingPrice,
-                tokenType = auction.tokenType,
+                chainType = auction.chainType,
                 statusType = auction.statusType,
                 createdDate = auction.createdDateTime,
                 endDate = auction.endDateTime,

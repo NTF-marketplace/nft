@@ -23,7 +23,6 @@ class NftListingService(
             StatusType.ACTIVED -> {
                 nftListingRepository.findByNftId(newListing.nftId)
                     .flatMap { nftListing ->
-                        println("statusType : " + newListing.statusType)
                         nftListingRepository.updateListing(nftId = nftListing.nftId, statusType = StatusType.LISTING)
                     }
                     .then(redisService.updateToRedis(newListing.nftId))
@@ -44,7 +43,7 @@ class NftListingService(
                 id = listing.id,
                 nftId =  listing.nftId,
                 price = listing.price,
-                tokenType = listing.tokenType,
+                chainType = listing.chainType,
                 statusType = listing.statusType,
                 createdDate = listing.createdDateTime,
                 endDate = listing.endDateTime,

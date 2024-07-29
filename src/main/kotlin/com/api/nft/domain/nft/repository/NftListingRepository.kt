@@ -5,10 +5,11 @@ import com.api.nft.enums.StatusType
 import com.api.nft.enums.TokenType
 import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.r2dbc.repository.R2dbcRepository
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Mono
 import java.math.BigDecimal
 
-interface NftListingRepository : R2dbcRepository<NftListing,Long> {
+interface NftListingRepository : ReactiveCrudRepository<NftListing,Long> {
 
     fun findByNftId(nftId: Long) : Mono<NftListing>
 

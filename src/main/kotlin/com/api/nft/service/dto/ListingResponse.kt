@@ -1,7 +1,7 @@
 package com.api.nft.service.dto
 
+import com.api.nft.enums.ChainType
 import com.api.nft.enums.StatusType
-import com.api.nft.enums.TokenType
 import java.math.BigDecimal
 
 data class ListingResponse(
@@ -12,5 +12,5 @@ data class ListingResponse(
     val endDateTime: Long,
     val statusType: StatusType,
     val price: BigDecimal,
-    val tokenType: TokenType
+    val chainType: ChainType
 )

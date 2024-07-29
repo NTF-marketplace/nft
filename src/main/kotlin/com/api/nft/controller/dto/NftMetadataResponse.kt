@@ -2,8 +2,6 @@ package com.api.nft.controller.dto
 
 import com.api.nft.enums.ChainType
 import com.api.nft.enums.ContractType
-import com.api.nft.enums.TokenType
-import java.math.BigDecimal
 
 
 data class NftMetadataResponse(
@@ -16,5 +14,4 @@ data class NftMetadataResponse(
     val collectionName: String,
     val image: String,
     val lastPrice: Double?,
-    val tokenType: TokenType?,
 )

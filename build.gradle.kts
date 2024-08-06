@@ -6,24 +6,25 @@ plugins {
     id("org.flywaydb.flyway") version "9.21.1"
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
+    kotlin("plugin.lombok") version "1.9.23"
+    id("io.freefair.lombok") version "8.1.0"
 }
 
 group = "com.api"
 version = "0.0.1-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
     mavenCentral()
 }
+extra["springCloudVersion"] = "2023.0.2"
 
 dependencies {
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.boot:spring-boot-starter-batch")
-    implementation("org.springframework.boot:spring-boot-starter-jooq")
-    implementation("org.springframework.boot:spring-boot-starter-quartz")
-
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.postgresql:r2dbc-postgresql:1.0.4.RELEASE")
     implementation("org.postgresql:postgresql:42.7.3")
@@ -36,19 +37,30 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-//    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
-//    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
 
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework:spring-context")
+
+    implementation("org.web3j:core:4.9.1")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.springframework.batch:spring-batch-test")
+
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64")
+
 }
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
+}
+
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 

@@ -23,7 +23,7 @@ class NftAuctionService(
                         nftAuctionRepository.updateAuction(nftId = newAuction.nftId, statusType = StatusType.AUCTION)
                     }
             }
-            StatusType.RESERVATION_CANCEL, StatusType.CANCEL, StatusType.EXPIRED -> {
+            StatusType.RESERVATION_CANCEL, StatusType.CANCEL, StatusType.EXPIRED, StatusType.LEDGER -> {
                 nftAuctionRepository.findByNftId(newAuction.nftId)
                     .flatMap { nftAuction ->
                         nftAuctionRepository.deleteByNftId(nftAuction.nftId)

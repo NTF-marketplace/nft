@@ -27,7 +27,7 @@ class NftListingService(
                     }
                     .then(redisService.updateToRedis(newListing.nftId))
             }
-            StatusType.RESERVATION_CANCEL, StatusType.CANCEL, StatusType.EXPIRED -> {
+            StatusType.RESERVATION_CANCEL, StatusType.CANCEL, StatusType.EXPIRED, StatusType.LEDGER -> {
                 nftListingRepository.findByNftId(newListing.nftId)
                     .flatMap { nftListing ->
                         nftListingRepository.deleteByNftId(nftListing.nftId)

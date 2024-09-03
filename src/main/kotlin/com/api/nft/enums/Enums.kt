@@ -11,6 +11,7 @@ enum class ChainType{
 
 }
 
+enum class OrderType { LISTING, AUCTION }
 
 enum class NetworkType{
         ETHEREUM,

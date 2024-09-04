@@ -27,7 +27,7 @@ class MoralisApiService(
             ChainType.LINEA_SEPOLIA -> "0xe705"
             ChainType.ETHEREUM_HOLESKY -> "0x4268"
             ChainType.ETHEREUM_SEPOLIA -> "0xaa36a7"
-            ChainType.POLYGON_AMOY -> "0xaa36a7"
+            ChainType.POLYGON_AMOY -> "0x13882"
         }
         return chain
     }

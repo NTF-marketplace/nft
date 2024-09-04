@@ -3,6 +3,7 @@ package com.api.nft.service.api
 import com.api.nft.domain.nft.NftAuction
 import com.api.nft.domain.nft.repository.NftAuctionRepository
 import com.api.nft.enums.StatusType
+import com.api.nft.kafka.dto.SaleResponse
 import com.api.nft.service.dto.AuctionResponse
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
@@ -12,7 +13,7 @@ class NftAuctionService(
     private val nftAuctionRepository: NftAuctionRepository,
 ) {
 
-    fun update(newAuction: AuctionResponse): Mono<Void> {
+    fun update(newAuction: SaleResponse): Mono<Void> {
         return when (newAuction.statusType) {
             StatusType.RESERVATION -> {
                 save(newAuction)
@@ -33,12 +34,12 @@ class NftAuctionService(
             else -> Mono.empty()
         }
     }
-    fun save(auction: AuctionResponse) : Mono<Void> {
+    fun save(auction: SaleResponse) : Mono<Void> {
         return nftAuctionRepository.save(
             NftAuction(
                 id = auction.id,
                 nftId =  auction.nftId,
-                startingPrice = auction.startingPrice,
+                startingPrice = auction.price,
                 chainType = auction.chainType,
                 statusType = auction.statusType,
                 createdDate = auction.createdDateTime,

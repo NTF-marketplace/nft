@@ -29,12 +29,4 @@ class RabbitConfig {
 
     @Bean
     fun nftExchange() = createFanoutExchange("nftExchange")
-
-
-    @Bean
-    fun listingExchange() = createFanoutExchange("listingExchange")
-
-
-     @Bean
-     fun auctionExchange() = createFanoutExchange("auctionExchange")
 }

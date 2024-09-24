@@ -3,6 +3,7 @@ package com.api.nft.service.api
 import com.api.nft.domain.nft.NftListing
 import com.api.nft.domain.nft.repository.NftListingRepository
 import com.api.nft.enums.StatusType
+import com.api.nft.kafka.dto.SaleResponse
 import com.api.nft.service.RedisService
 import com.api.nft.service.dto.ListingResponse
 import org.springframework.stereotype.Service
@@ -14,7 +15,7 @@ class NftListingService(
     private val redisService: RedisService,
 ) {
 
-    fun update(newListing: ListingResponse): Mono<Void> {
+    fun update(newListing: SaleResponse): Mono<Void> {
         return when (newListing.statusType) {
             StatusType.RESERVATION -> {
                 save(newListing)
@@ -27,7 +28,7 @@ class NftListingService(
                     }
                     .then(redisService.updateToRedis(newListing.nftId))
             }
-            StatusType.RESERVATION_CANCEL, StatusType.CANCEL, StatusType.EXPIRED -> {
+            StatusType.RESERVATION_CANCEL, StatusType.CANCEL, StatusType.EXPIRED, StatusType.LEDGER -> {
                 nftListingRepository.findByNftId(newListing.nftId)
                     .flatMap { nftListing ->
                         nftListingRepository.deleteByNftId(nftListing.nftId)
@@ -37,7 +38,7 @@ class NftListingService(
             else -> Mono.empty()
         }
     }
-    fun save(listing: ListingResponse) : Mono<NftListing> {
+    fun save(listing: SaleResponse) : Mono<NftListing> {
         return nftListingRepository.save(
             NftListing(
                 id = listing.id,

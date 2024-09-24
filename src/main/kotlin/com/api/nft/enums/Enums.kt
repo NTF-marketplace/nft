@@ -11,6 +11,7 @@ enum class ChainType{
 
 }
 
+enum class OrderType { LISTING, AUCTION }
 
 enum class NetworkType{
         ETHEREUM,
@@ -25,4 +26,4 @@ enum class TokenType {
         SAND, MATIC, ETH, BTC
 }
 
-enum class StatusType { RESERVATION, ACTIVED, RESERVATION_CANCEL, CANCEL, EXPIRED,LISTING, AUCTION }
+enum class StatusType { RESERVATION, ACTIVED, RESERVATION_CANCEL, CANCEL, EXPIRED,LISTING, AUCTION,LEDGER }

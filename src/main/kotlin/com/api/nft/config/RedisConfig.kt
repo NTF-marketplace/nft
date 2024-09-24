@@ -1,5 +1,8 @@
 package com.api.nft.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisClusterConfiguration
@@ -43,7 +46,7 @@ class RedisConfig {
                     .autoReconnect(true)
                     .pingBeforeActivateConnection(true)
                     .build()
-            )            
+            )
             .build()
         redisClusterConfiguration.password = RedisPassword.of("bitnami")
         redisClusterConfiguration.maxRedirects = 3

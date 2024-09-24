@@ -56,6 +56,12 @@ class NftController(
         return nftService.getByWalletNft(wallet,chainType)
 
     }
+    // collection을 구현할건데 1h / 7h /12h / 24h / 7d/ 30d
+    // Listing은 matched volume 이 높은순이여야돼
+
+
+
+    // aution은 현재 acution중인것
 
 
 }

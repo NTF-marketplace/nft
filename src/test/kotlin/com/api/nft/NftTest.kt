@@ -22,10 +22,12 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.test.context.ActiveProfiles
 import reactor.test.StepVerifier
 import java.math.BigDecimal
 
 @SpringBootTest
+@ActiveProfiles("local")
 class NftTest(
     @Autowired private val moralisApiService: MoralisApiService,
     @Autowired private val nftService: NftService,
@@ -168,5 +170,11 @@ class NftTest(
         val res= moralisApiService.getNFTsByAddress(address,ChainType.POLYGON_MAINNET).block()
         println(res.toString())
     }
+
+   @Test
+   fun test1() {
+       val nft = nftRepository.findByNftJoinMetadata(10L).block()
+       println(nft.toString())
+   }
 
 }

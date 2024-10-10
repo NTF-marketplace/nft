@@ -96,6 +96,7 @@ class NftService(
         tokenId = this.tokenId,
         tokenAddress = this.tokenAddress,
         chainType = this.chainType,
+        collectionName = this.collectionName
     )
 
     fun getNftData(request: NftData, chainType: ChainType): Mono<Triple<NftData, NftMetadata, List<NftAttribute>?>> {

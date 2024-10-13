@@ -8,6 +8,8 @@ import com.api.nft.enums.ContractType
 import com.api.nft.event.dto.NftCreatedEvent
 import com.api.nft.event.dto.NftResponse
 import com.api.nft.service.RedisService
+import com.api.nft.service.dto.NftDetailResponse
+import com.api.nft.service.external.MarketApiService
 import com.api.nft.service.external.dto.NftAttribute
 import com.api.nft.service.external.dto.NftData
 import com.api.nft.service.external.dto.NftMetadata
@@ -27,7 +29,49 @@ class NftService(
     private val transferService: TransferService,
     private val moralisApiService: MoralisApiService,
     private val redisService: RedisService,
+    private val marketApiService: MarketApiService,
+    private val nftListingService: NftListingService,
+    private val nftAuctionService: NftAuctionService,
 ) {
+
+    fun findByNftDetail1(nftId: Long): Mono<NftDetailResponse> {
+        return nftRepository.findById(nftId)
+            .flatMap { nft ->
+                val metadataMono = metadataService.findByMetadata(nftId)
+                val attributeMono = attributeService.findByAttribute(nftId).collectList()
+                val transferMono = transferService.findOrUpdateByNftId(nftId).collectList()
+                val listingMono = nftListingService.findByNftId(nftId)
+                val auctionMono = nftAuctionService.findByNftId(nftId)
+                    .flatMap { auction ->
+                        marketApiService.getOfferHistory(auction.id).collectList()
+                            .map { offers -> auction to offers }
+                    }.defaultIfEmpty(null to emptyList())
+
+                val ledgerMono = marketApiService.getLedgerHistory(nftId).collectList()
+
+                Mono.zip(metadataMono, attributeMono, transferMono, listingMono, auctionMono, ledgerMono)
+                    .map { tuple ->
+                        val metadata = tuple.t1
+                        val attributes = tuple.t2
+                        val transfers = tuple.t3
+                        val listing = tuple.t4
+                        val (auction, offers) = tuple.t5
+                        val ledgers = tuple.t6
+
+                        NftDetailResponse(
+                            nft = nft,
+                            metadata = metadata,
+                            attributes = attributes,
+                            transfers = transfers,
+                            listing = listing,
+                            auction = auction,
+                            offers = offers,
+                            ledgers = ledgers,
+                        )
+                    }
+            }
+    }
+
 
     fun findAllById(ids: List<Long>): Flux<NftMetadataResponse> {
         return nftRepository.findAllByNftJoinMetadata(ids)

@@ -52,4 +52,8 @@ class NftListingService(
         )
     }
 
+    fun findByNftId(nftId: Long): Mono<NftListing> {
+        return nftListingRepository.findByNftId(nftId)
+    }
+
 }

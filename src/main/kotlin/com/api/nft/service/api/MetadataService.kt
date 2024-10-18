@@ -20,6 +20,9 @@ class MetadataService(
                 animationUrl = metadata.animationUrl,
             )
         )
+    }
 
+    fun findByMetadata(nftId: Long): Mono<Metadata> {
+        return metadataRepository.findByNftId(nftId)
     }
 }

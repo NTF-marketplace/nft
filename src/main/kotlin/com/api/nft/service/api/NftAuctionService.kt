@@ -47,4 +47,8 @@ class NftAuctionService(
             )
         ).then()
     }
+
+    fun findByNftId(nftId: Long): Mono<NftAuction> {
+        return nftAuctionRepository.findByNftId(nftId)
+    }
 }

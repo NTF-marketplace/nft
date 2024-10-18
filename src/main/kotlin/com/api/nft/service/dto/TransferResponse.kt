@@ -1,4 +1,4 @@
-package com.api.nft.service
+package com.api.nft.service.dto
 
 import java.math.BigInteger
 

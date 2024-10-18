@@ -5,6 +5,7 @@ import com.api.nft.domain.attribute.AttributeRepository
 import com.api.nft.service.external.dto.NftAttribute
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Service
 class AttributeService(
@@ -21,5 +22,9 @@ class AttributeService(
                 )
             )
         }
+    }
+
+    fun findByAttribute(nftId: Long): Flux<Attribute> {
+        return attributeRepository.findAllByNftId(nftId)
     }
 }

@@ -1,5 +1,7 @@
 package com.api.nft.service.api
 
+import com.api.nft.controller.dto.MetadataResponse
+import com.api.nft.controller.dto.MetadataResponse.Companion.toResponse
 import com.api.nft.domain.metadata.Metadata
 import com.api.nft.domain.metadata.repository.MetadataRepository
 import com.api.nft.service.external.dto.NftMetadata
@@ -22,7 +24,7 @@ class MetadataService(
         )
     }
 
-    fun findByMetadata(nftId: Long): Mono<Metadata> {
-        return metadataRepository.findByNftId(nftId)
+    fun findByMetadata(nftId: Long): Mono<MetadataResponse> {
+        return metadataRepository.findByNftId(nftId).map { it.toResponse() }
     }
 }

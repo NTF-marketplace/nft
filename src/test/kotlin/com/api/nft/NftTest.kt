@@ -14,8 +14,10 @@ import com.api.nft.service.api.NftService
 import com.api.nft.service.api.TransferService
 import com.api.nft.event.dto.NftResponse
 import com.api.nft.service.RedisService
+import com.api.nft.service.api.MetadataService
 import com.api.nft.service.api.NftListingService
 import com.api.nft.service.dto.ListingResponse
+import com.api.nft.service.external.MarketApiService
 import com.api.nft.service.external.binance.BinanceApiService
 import com.api.nft.service.external.infura.InfuraApiService
 import org.junit.jupiter.api.Test
@@ -41,8 +43,12 @@ class NftTest(
     @Autowired private val redisService: RedisService,
     @Autowired private val nftListingService: NftListingService,
     @Autowired private val nftListingRepository: NftListingRepository,
+    @Autowired private val marketApiService: MarketApiService,
 ) {
 
+
+    @Autowired
+    private lateinit var metadataService: MetadataService
 
     @Test
     fun getEth() {
@@ -80,6 +86,8 @@ class NftTest(
         tokenId = this.tokenId,
         tokenAddress = this.tokenAddress,
         chainType = this.chainType,
+        collectionName = this.collectionName
+
     )
 
 
@@ -164,6 +172,17 @@ class NftTest(
     }
 
     @Test
+    fun rabbitMqSender() {
+        nftRepository.findAll().map {
+//            nftRepository.findById(5L).map {
+            rabbitMQSender.nftSend(it.toResponse())
+        }.subscribe()
+
+         Thread.sleep(60000)
+
+    }
+
+    @Test
     fun test() {
         val address = "0x01b72b4aa3f66f213d62d53e829bc172a6a72867"
 
@@ -176,5 +195,25 @@ class NftTest(
        val nft = nftRepository.findByNftJoinMetadata(10L).block()
        println(nft.toString())
    }
+
+    @Test
+    fun marketApiTest() {
+        marketApiService.getOfferHistory(nftId = 5).map {
+            println("offerResponse : " + it.toString())
+        }.blockLast()
+    }
+
+    @Test
+    fun nftDetailTest() {
+        val res = nftService.findByNftDetail1(nftId = 5).block()
+        println("detail : " + res.toString())
+
+    }
+
+    @Test
+    fun metadataTest() {
+        val res = metadataService.findByMetadata(nftId = 5L).block()
+        println("response : " + res.toString())
+    }
 
 }

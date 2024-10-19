@@ -1,5 +1,7 @@
 package com.api.nft.service.external
 
+import com.api.nft.controller.dto.OfferResponse
+import com.api.nft.controller.dto.OrdersResponse
 import com.api.nft.properties.MarketApiProperties
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -15,7 +17,7 @@ class MarketApiService(
         .build()
 
     //TODO("")
-    fun getOfferHistory(nftId: Long): Flux<Any> {
+    fun getOfferHistory(nftId: Long): Flux<OfferResponse> {
         return webClient.get()
             .uri{
                 it.path("/v1/offer/history")
@@ -23,10 +25,10 @@ class MarketApiService(
                 it.build()
             }
             .retrieve()
-            .bodyToFlux(Any::class.java)
+            .bodyToFlux(OfferResponse::class.java)
     }
     //TODO("")
-    fun getLedgerHistory(nftId: Long): Flux<Any> {
+    fun getLedgerHistory(nftId: Long): Flux<OrdersResponse> {
         return webClient.get()
             .uri{
                 it.path("/v1/orders/history")
@@ -34,6 +36,6 @@ class MarketApiService(
                 it.build()
             }
             .retrieve()
-            .bodyToFlux(Any::class.java)
+            .bodyToFlux(OrdersResponse::class.java)
     }
 }

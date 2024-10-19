@@ -16,6 +16,7 @@ import com.api.nft.service.external.dto.NftMetadata
 import com.api.nft.service.external.moralis.MoralisApiService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -34,6 +35,7 @@ class NftService(
     private val nftAuctionService: NftAuctionService,
 ) {
 
+    // TODO("한번에 조회로 변경")
     fun findByNftDetail1(nftId: Long): Mono<NftDetailResponse> {
         return nftRepository.findById(nftId)
             .flatMap { nft ->
@@ -48,6 +50,7 @@ class NftService(
                     }.defaultIfEmpty(null to emptyList())
 
                 val ledgerMono = marketApiService.getLedgerHistory(nftId).collectList()
+                    .defaultIfEmpty(emptyList())
 
                 Mono.zip(metadataMono, attributeMono, transferMono, listingMono, auctionMono, ledgerMono)
                     .map { tuple ->
@@ -113,8 +116,8 @@ class NftService(
                 createMetadata(nftData, metadataData, attributeDataList ,chainType) }
             .flatMap { createdNft ->
                 redisService.updateToRedis(createdNft.id!!).thenReturn(createdNft) }
-            // .flatMap { nft ->
-            //     transferService.createTransfer(nft).thenReturn(nft) }
+//             .flatMap { nft ->
+//                 transferService.createTransfer(nft).thenReturn(nft) }
             .doOnSuccess {
                 eventPublisher.publishEvent(NftCreatedEvent(this, it.toResponse()))
             }
